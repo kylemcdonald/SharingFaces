@@ -30,11 +30,15 @@ The easiest way to implement the above is by doing all the distance checks at ea
 * Write slow search function
 * Fix camera latency
 * Optimize search function
-* Optimize JPG saving and loading
 * Shader pass for any final correction
+* Optimize JPG saving and loading, see [libjpeg-turbo](http://libjpeg-turbo.virtualgl.org/)
 * Abstract the data representation out of ofxFaceTracker
 * Check if FaceTracker can be run faster using [clang-omp](http://clang-omp.github.io/)
 * Add config file and multiple city support
+* Do benchmarks on different parts of the code to understand speed and scaling constraints
+* Optimize face tracking parameters
+* Don't uplaod camera to texture until the last moment
+* Use eye center instead of face center
 
 ### Hardware
 

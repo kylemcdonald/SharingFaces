@@ -1,3 +1,8 @@
+/*
+ this class is only for serializing face tracking data. any analysis or
+ processing should be done in anohter class or file.
+ */
+
 #pragma once
 
 #include "ofxFaceTracker.h"
