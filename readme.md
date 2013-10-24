@@ -34,6 +34,7 @@ The easiest way to implement the above is by doing all the distance checks at ea
 * Shader pass for any final correction
 * Abstract the data representation out of ofxFaceTracker
 * Check if FaceTracker can be run faster using [clang-omp](http://clang-omp.github.io/)
+* Add config file and multiple city support
 
 ### Hardware
 
