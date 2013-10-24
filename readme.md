@@ -26,13 +26,13 @@ The easiest way to implement the above is by doing all the distance checks at ea
 
 ### Code
 
-* Write exporter/importer for ofxFaceTracker objects
 * Rotate, save and load JPGs
 * Write slow search function
 * Fix camera latency
 * Optimize search function
 * Optimize JPG saving and loading
 * Shader pass for any final correction
+* Abstract the data representation out of ofxFaceTracker
 
 ### Hardware
 

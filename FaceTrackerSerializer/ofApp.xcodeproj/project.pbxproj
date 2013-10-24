@@ -103,6 +103,8 @@
 		185BB9B07B8DB74BD2D3211F /* ofxFaceTracker.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.cpp; fileEncoding = 30; name = ofxFaceTracker.cpp; path = ../../../addons/ofxFaceTracker/src/ofxFaceTracker.cpp; sourceTree = SOURCE_ROOT; };
 		19660B42DF06415007708495 /* IO.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = IO.h; path = ../../../addons/ofxFaceTracker/libs/FaceTracker/include/FaceTracker/IO.h; sourceTree = SOURCE_ROOT; };
 		1E95EFD35ED9C5D97F2F015E /* timer.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = timer.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/timer.h; sourceTree = SOURCE_ROOT; };
+		273EC8BF1818F60800AEF7E2 /* FaceTrackerData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaceTrackerData.h; sourceTree = "<group>"; };
+		273EC8C01818F9C300AEF7E2 /* RawUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RawUtils.h; sourceTree = "<group>"; };
 		2E411F99E3AB7154484B4F96 /* kmeans_index.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = kmeans_index.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/kmeans_index.h; sourceTree = SOURCE_ROOT; };
 		30884ECD9C171AB1B1BDFC3F /* cv.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = cv.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv/cv.hpp; sourceTree = SOURCE_ROOT; };
 		319268D200F1BA567E4CCFF9 /* cxeigen.hpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = cxeigen.hpp; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv/cxeigen.hpp; sourceTree = SOURCE_ROOT; };
@@ -387,6 +389,16 @@
 				1E95EFD35ED9C5D97F2F015E /* timer.h */,
 			);
 			name = flann;
+			sourceTree = "<group>";
+		};
+		273EC8BE1818F5FD00AEF7E2 /* SharedCode */ = {
+			isa = PBXGroup;
+			children = (
+				273EC8BF1818F60800AEF7E2 /* FaceTrackerData.h */,
+				273EC8C01818F9C300AEF7E2 /* RawUtils.h */,
+			);
+			name = SharedCode;
+			path = ../SharedCode;
 			sourceTree = "<group>";
 		};
 		2B86176FA97BFB2BEE1F2F83 /* ofxFaceTracker */ = {
@@ -747,6 +759,7 @@
 			children = (
 				E4B6FCAD0C3E899E008CF71C /* openFrameworks-Info.plist */,
 				E4EB6923138AFD0F00A09F29 /* Project.xcconfig */,
+				273EC8BE1818F5FD00AEF7E2 /* SharedCode */,
 				E4B69E1C0A3A1BDC003C02F2 /* src */,
 				E4EEC9E9138DF44700A80321 /* openFrameworks */,
 				BB4B014C10F69532006C3DED /* addons */,
@@ -1141,6 +1154,52 @@
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = NONE;
+				HEADER_SEARCH_PATHS = (
+					"$(OF_CORE_HEADERS)",
+					src,
+					../../../addons/ofxOpenCv/libs,
+					../../../addons/ofxOpenCv/libs/opencv,
+					../../../addons/ofxOpenCv/libs/opencv/include,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/calib3d,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/contrib,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/core,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/features2d,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/gpu,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/highgui,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/imgproc,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/legacy,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/ml,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/objdetect,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/ts,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/video,
+					../../../addons/ofxOpenCv/libs/opencv/lib,
+					../../../addons/ofxOpenCv/libs/opencv/lib/linuxarmv6l,
+					../../../addons/ofxOpenCv/libs/opencv/lib/linuxarmv7l,
+					../../../addons/ofxOpenCv/libs/opencv/lib/osx,
+					../../../addons/ofxOpenCv/src,
+					../../../addons/ofxCv/libs,
+					../../../addons/ofxCv/libs/CLD,
+					../../../addons/ofxCv/libs/CLD/include,
+					../../../addons/ofxCv/libs/CLD/include/CLD,
+					../../../addons/ofxCv/libs/CLD/src,
+					../../../addons/ofxCv/libs/ofxCv,
+					../../../addons/ofxCv/libs/ofxCv/include,
+					../../../addons/ofxCv/libs/ofxCv/include/ofxCv,
+					../../../addons/ofxCv/libs/ofxCv/src,
+					../../../addons/ofxCv/src,
+					../../../addons/ofxFaceTracker/libs,
+					../../../addons/ofxFaceTracker/libs/FaceTracker,
+					../../../addons/ofxFaceTracker/libs/FaceTracker/include,
+					../../../addons/ofxFaceTracker/libs/FaceTracker/include/FaceTracker,
+					../../../addons/ofxFaceTracker/libs/FaceTracker/model,
+					../../../addons/ofxFaceTracker/libs/FaceTracker/src,
+					../../../addons/ofxFaceTracker/libs/FaceTracker/src/lib,
+					../../../addons/ofxFaceTracker/src,
+					../SharedData/,
+				);
 				ICON = "$(ICON_NAME_DEBUG)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
@@ -1226,6 +1285,52 @@
 				FRAMEWORK_SEARCH_PATHS_QUOTED_FOR_TARGET_1 = "\"$(SRCROOT)/../../../libs/glut/lib/osx\"";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_MODEL_TUNING = NONE;
+				HEADER_SEARCH_PATHS = (
+					"$(OF_CORE_HEADERS)",
+					src,
+					../../../addons/ofxOpenCv/libs,
+					../../../addons/ofxOpenCv/libs/opencv,
+					../../../addons/ofxOpenCv/libs/opencv/include,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/calib3d,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/contrib,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/core,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/features2d,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/gpu,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/highgui,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/imgproc,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/legacy,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/ml,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/objdetect,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/ts,
+					../../../addons/ofxOpenCv/libs/opencv/include/opencv2/video,
+					../../../addons/ofxOpenCv/libs/opencv/lib,
+					../../../addons/ofxOpenCv/libs/opencv/lib/linuxarmv6l,
+					../../../addons/ofxOpenCv/libs/opencv/lib/linuxarmv7l,
+					../../../addons/ofxOpenCv/libs/opencv/lib/osx,
+					../../../addons/ofxOpenCv/src,
+					../../../addons/ofxCv/libs,
+					../../../addons/ofxCv/libs/CLD,
+					../../../addons/ofxCv/libs/CLD/include,
+					../../../addons/ofxCv/libs/CLD/include/CLD,
+					../../../addons/ofxCv/libs/CLD/src,
+					../../../addons/ofxCv/libs/ofxCv,
+					../../../addons/ofxCv/libs/ofxCv/include,
+					../../../addons/ofxCv/libs/ofxCv/include/ofxCv,
+					../../../addons/ofxCv/libs/ofxCv/src,
+					../../../addons/ofxCv/src,
+					../../../addons/ofxFaceTracker/libs,
+					../../../addons/ofxFaceTracker/libs/FaceTracker,
+					../../../addons/ofxFaceTracker/libs/FaceTracker/include,
+					../../../addons/ofxFaceTracker/libs/FaceTracker/include/FaceTracker,
+					../../../addons/ofxFaceTracker/libs/FaceTracker/model,
+					../../../addons/ofxFaceTracker/libs/FaceTracker/src,
+					../../../addons/ofxFaceTracker/libs/FaceTracker/src/lib,
+					../../../addons/ofxFaceTracker/src,
+					../SharedData/,
+				);
 				ICON = "$(ICON_NAME_RELEASE)";
 				ICON_FILE = "$(ICON_FILE_PATH)$(ICON)";
 				INFOPLIST_FILE = "openFrameworks-Info.plist";
