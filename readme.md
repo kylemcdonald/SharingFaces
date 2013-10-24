@@ -24,10 +24,17 @@ The easiest way to implement the above is by doing all the distance checks at ea
 
 ## Todo
 
-* Write exporter/importer for ofxFaceTracker objects
-* Write slow search function
-* Save and load JPGs
-* Fix camera latency
+### Code
 
+* Write exporter/importer for ofxFaceTracker objects
+* Rotate, save and load JPGs
+* Write slow search function
+* Fix camera latency
 * Optimize search function
 * Optimize JPG saving and loading
+* Shader pass for any final correction
+
+### Hardware
+
+* Find replacement 12V power supply
+* Find replacement BNC cable
