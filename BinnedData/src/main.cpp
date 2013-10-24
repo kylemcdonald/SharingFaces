@@ -5,37 +5,36 @@
 class ofApp : public ofBaseApp {
 public:
 	BinnedData<ofVec2f> data;
-	ofMesh history, neighborsMesh;
+	ofMesh historyMesh, dataMesh, neighborsMesh;
 	
 	void setup() {
 		useSharedData();
 		data.setup(ofGetWidth(), ofGetHeight(), 8);
-		history.setMode(OF_PRIMITIVE_POINTS);
+		historyMesh.setMode(OF_PRIMITIVE_POINTS);
+		dataMesh.setMode(OF_PRIMITIVE_POINTS);
 		neighborsMesh.setMode(OF_PRIMITIVE_POINTS);
-		for(int i = 0; i < 100000; i++) {
-			float r = 256 * pow(ofRandom(1), 2), t = ofRandom(TWO_PI);
-			ofVec2f cur(256 + sin(t) * r, 256 + cos(t) * r);
-			history.addVertex(cur);
-			data.add(cur, cur);
-		}
 	}
 	void update() {
 		ofVec2f cur(mouseX, mouseY);
-//		history.addVertex(cur);
-		vector<ofVec2f*> neighbors = data.getNeighborsRatio(cur, .01);
+		historyMesh.addVertex(cur);
+		vector<ofVec2f*> neighbors = data.getNeighborsRatio(cur, .1);
 		neighborsMesh.clear();
 		for(int i = 0; i < neighbors.size(); i++) {
 			neighborsMesh.addVertex(*neighbors[i]);
 		}
-//		if(neighbors.size() < 8) {
-//			data.add(cur, cur);
-//		}
+		float minimumDistance = getMinimumDistance(cur, neighbors);
+		if(neighbors.size() == 0 || minimumDistance > 16) {
+			data.add(cur, cur);
+			dataMesh.addVertex(cur);
+		}
 	}
 	void draw() {
 		ofBackground(0);
 		glPointSize(2);
+		ofSetColor(64);
+		historyMesh.draw();
 		ofSetColor(255);
-		history.draw();
+		dataMesh.draw();
 		ofSetColor(255, 0, 0);
 		neighborsMesh.draw();
 		for(int i = 0; i < neighborsMesh.getNumVertices(); i++) {
