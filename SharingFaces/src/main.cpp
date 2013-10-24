@@ -6,7 +6,6 @@ class ofApp : public ofBaseApp {
 public:
 	ofVideoGrabber cam;
 	ofxFaceTracker tracker;
-	FaceTrackerData trackerDataSave, trackerDataLoad;
 	
 	void setup() {
 		useSharedData();
@@ -18,26 +17,14 @@ public:
 		if(cam.isFrameNew()) {
 			Mat camMat = toCv(cam);
 			tracker.update(camMat);
-			trackerDataSave.load(tracker);
 		}
 	}
 	void draw() {
 		ofSetColor(255);
 		cam.draw(0, 0);
 		tracker.draw();
-		glPointSize(4);
-		ofSetColor(ofColor::red);
-		trackerDataSave.draw();
-		ofSetColor(ofColor::blue);
-		trackerDataLoad.draw();
 	}
 	void keyPressed(int key) {
-		if(key == 's') {
-			trackerDataSave.save("out.face");
-		}
-		if(key == 'l') {
-			trackerDataLoad.load("out.face");
-		}
 	}
 };
 
