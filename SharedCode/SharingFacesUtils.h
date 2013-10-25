@@ -4,6 +4,7 @@
 #include "ofxFaceTracker.h"
 #include "FaceTrackerData.h"
 #include "BinnedData.h"
+#include "FaceCompare.h"
 
 using namespace ofxCv;
 using namespace cv;

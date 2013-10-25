@@ -54,6 +54,9 @@ public:
 		}
 		file.close();
 	}
+	float distanceSquared(const ofVec2f& position) const {
+		return this->position.distanceSquared(position);
+	}
 	void draw() {
 		ofMesh mesh;
 		mesh.setMode(OF_PRIMITIVE_POINTS);

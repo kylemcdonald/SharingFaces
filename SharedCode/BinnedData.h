@@ -30,7 +30,7 @@ public:
 		data[y][x].push_back(element);
 		totalElements++;
 	}
-	vector<T*> getNeighborsRange(const ofVec2f& position, float radius) {
+	vector<T*> getNeighborsRadius(const ofVec2f& position, float radius) {
 		vector<T*> neighbors;
 		int n, s, w, e;
 		bin(position - ofVec2f(radius, radius), w, n);
@@ -40,7 +40,7 @@ public:
 			for(int x = w; x <= e; x++) {
 				vector<T>& cur = data[y][x];
 				for(int i = 0; i < cur.size(); i++) {
-					float distance = position.distanceSquared(cur[i]);
+					float distance = cur[i].distanceSquared(position);
 					if(distance < squaredRadius) {
 						neighbors.push_back(&cur[i]);
 					}
