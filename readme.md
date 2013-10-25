@@ -26,20 +26,17 @@ The easiest way to implement the above is by doing all the distance checks at ea
 
 ### Code
 
-* Load JPGs
 * Only transfer metadata into binned data when visitor leaves
-* Write slow search function
 * Fix camera latency
+* Use eye center instead of face center
+* Add config file and multiple city support
+* Optimize face tracking parameters
+* Do benchmarks on different parts of the code to understand speed and scaling constraints
 * Optimize search function
 * Shader pass for any final correction
 * Optimize JPG saving and loading, see [libjpeg-turbo](http://libjpeg-turbo.virtualgl.org/) saving is pretty fast, but loading on GPU?
 * Abstract the data representation out of ofxFaceTracker
 * Check if FaceTracker can be run faster using [clang-omp](http://clang-omp.github.io/)
-* Add config file and multiple city support
-* Do benchmarks on different parts of the code to understand speed and scaling constraints
-* Optimize face tracking parameters
-* Don't uplaod camera to texture until the last moment
-* Use eye center instead of face center
 
 ### Hardware
 

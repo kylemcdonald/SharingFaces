@@ -10,8 +10,16 @@
 #include "RawUtils.h"
 
 class FaceTrackerData {
+protected:
+	void setLabel(const string& filename) {
+		string prefix = "metadata/";
+		string postfix = ".face";
+		label = filename.substr(prefix.length(), filename.length() - prefix.length() - postfix.length());
+	}
 public:
 	const static int pointCount = 66;
+	
+	string label;
 	
 	ofVec2f position;
 	float scale;
@@ -27,6 +35,7 @@ public:
 		imagePoints = tracker.getImagePoints();
 	}
 	void load(const string& filename) {
+		setLabel(filename);
 		ofFile file;
 		file.open(filename, ofFile::ReadOnly, true);
 		loadRaw(file, position);
@@ -37,6 +46,7 @@ public:
 		file.close();
 	}
 	void save(const string& filename) {
+		setLabel(filename);
 		ofFile file;
 		file.open(filename, ofFile::WriteOnly, true);
 		saveRaw(file, position);

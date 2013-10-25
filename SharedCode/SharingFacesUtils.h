@@ -46,9 +46,10 @@ void loadMetadata(BinnedData<FaceTrackerData>& data) {
 	for(int i = 0; i < allDates.size(); i++) {
 		ofDirectory curDate(allDates[i].path());
 		curDate.listDir();
+		string curDateName = "metadata/" + allDates[i].getFileName() + "/";
 		for(int j = 0; j < curDate.size(); j++) {
 			FaceTrackerData curData;
-			curData.load(curDate[j].path());
+			curData.load(curDateName + curDate[j].getFileName());
 			data.add(curData.position, curData);
 		}
 	}

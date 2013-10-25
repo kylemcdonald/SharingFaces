@@ -18,6 +18,7 @@ public:
 	ofImage rotated;
 	
 	FaceTrackerData nearestData;
+	string lastLabel;
 	ofImage similar;
 	
 	void setup() {
@@ -43,6 +44,7 @@ public:
 		cam.update();
 		if(cam.isFrameNew()) {
 			ofxCv::rotate90(cam, rotated, rotate ? 90 : 0);
+			ofxCv:flip(rotated, rotated, 1);
 			rotated.update();
 			Mat rotatedMat = toCv(rotated);
 			tracker.update(rotatedMat);
@@ -56,11 +58,14 @@ public:
 				curData.load(tracker);
 				if(!neighbors.empty()) {
 					nearestData = *faceCompare.nearest(curData, neighbors);
-					//similar.loadImage(); // load nearest from disk, need to store paths in FaceTrackerData
+					if(nearestData.label != lastLabel) {
+						similar.loadImage("images/" + nearestData.label + ".jpg");
+					}
+					lastLabel = nearestData.label;
 				}
 				if(faceCompare.different(curData, neighbors)) {
-//					saveFace(curData, rotated);
-//					data.add(position, curData);
+					saveFace(curData, rotated);
+					data.add(position, curData);
 				}
 			}
 		}
@@ -69,6 +74,9 @@ public:
 		ofSetColor(255);
 		if(rotated.isAllocated()) {
 			rotated.draw(0, 0);
+		}
+		if(similar.isAllocated()) {
+			similar.draw(0, 0);
 		}
 		tracker.draw();
 		ofNoFill();
