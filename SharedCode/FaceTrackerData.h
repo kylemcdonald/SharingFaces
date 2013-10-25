@@ -27,31 +27,23 @@ public:
 		imagePoints = tracker.getImagePoints();
 	}
 	void load(const string& filename) {
-		ifstream file;
-		file.open(ofToDataPath(filename).c_str(), ios::in | ios::binary);
-		if (file.is_open()) {
-			loadRaw(file, position);
-			loadRaw(file, scale);
-			loadRaw(file, orientation);
-			loadRaw(file, objectPoints, pointCount);
-			loadRaw(file, imagePoints, pointCount);
-		} else {
-			ofLogError("FaceTrackerData") << "couldn't load data from " << filename;
-		}
+		ofFile file;
+		file.open(filename, ofFile::ReadOnly, true);
+		loadRaw(file, position);
+		loadRaw(file, scale);
+		loadRaw(file, orientation);
+		loadRaw(file, objectPoints, pointCount);
+		loadRaw(file, imagePoints, pointCount);
 		file.close();
 	}
 	void save(const string& filename) {
-		ofstream file;
-		file.open(ofToDataPath(filename).c_str(), ios::out | ios::binary);
-		if (file.is_open()) {
-			saveRaw(file, position);
-			saveRaw(file, scale);
-			saveRaw(file, orientation);
-			saveRaw(file, objectPoints);
-			saveRaw(file, imagePoints);
-		} else {
-			ofLogError("FaceTrackerData") << "couldn't save data to " << filename;
-		}
+		ofFile file;
+		file.open(filename, ofFile::WriteOnly, true);
+		saveRaw(file, position);
+		saveRaw(file, scale);
+		saveRaw(file, orientation);
+		saveRaw(file, objectPoints);
+		saveRaw(file, imagePoints);
 		file.close();
 	}
 	float distanceSquared(const ofVec2f& position) const {

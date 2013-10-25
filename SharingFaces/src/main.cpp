@@ -56,7 +56,7 @@ public:
 				if(faceCompare.different(curData, neighbors)) {
 					dataMesh.addVertex(position);
 					data.add(position, curData);
-					cout << "added ";
+					saveFace(curData, rotated);
 				} else {
 					historyMesh.addVertex(position);
 				}
