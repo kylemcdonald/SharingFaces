@@ -26,7 +26,7 @@ The easiest way to implement the above is by doing all the distance checks at ea
 
 ### Code
 
-* Save and load JPGs
+* Load JPGs
 * Write slow search function
 * Fix camera latency
 * Optimize search function

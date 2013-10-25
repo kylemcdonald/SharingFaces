@@ -21,7 +21,6 @@ public:
 	
 	void setup() {
 		useSharedData();
-		ofSetLogLevel(OF_LOG_VERBOSE);
 		loadSettings();
 		tracker.setup();
 		cam.initGrabber(camWidth, camHeight, false);
@@ -32,6 +31,8 @@ public:
 		} else {
 			data.setup(camWidth, camHeight, binSize);
 		}
+		loadMetadata(data);
+		ofSetLogLevel(OF_LOG_VERBOSE);
 	}
 	void loadSettings() {
 		rotate = false;
@@ -80,6 +81,8 @@ public:
 		ofSetColor(255);
 		dataMesh.draw();
 		ofPopStyle();
+		
+		data.draw();
 		
 		string info =
 		ofToString(tracker.getPosition().x) + "x" + ofToString(tracker.getPosition().y) + "\n" +

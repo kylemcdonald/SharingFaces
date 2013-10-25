@@ -39,3 +39,17 @@ float getMinimumDistance(ofVec2f& position, vector<ofVec2f*> positions) {
 	}
 	return sqrt(minimumDistance);
 }
+
+void loadMetadata(BinnedData<FaceTrackerData>& data) {
+	ofDirectory allDates("metadata/");
+	allDates.listDir();
+	for(int i = 0; i < allDates.size(); i++) {
+		ofDirectory curDate(allDates[i].path());
+		curDate.listDir();
+		for(int j = 0; j < curDate.size(); j++) {
+			FaceTrackerData curData;
+			curData.load(curDate[j].path());
+			data.add(curData.position, curData);
+		}
+	}
+}

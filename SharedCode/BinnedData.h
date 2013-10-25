@@ -30,6 +30,26 @@ public:
 		data[y][x].push_back(element);
 		totalElements++;
 	}
+	void draw() {
+		ofPushStyle();
+		ofNoFill();
+		ofSetColor(255);
+		ofMesh mesh;
+		mesh.setMode(OF_PRIMITIVE_POINTS);
+		for(int y = 0; y < yBins; y++) {
+			for(int x = 0; x < xBins; x++) {
+				vector<T>& cur = data[y][x];
+				if(!cur.empty()) {
+					ofRect(x * binSize, y * binSize, binSize, binSize);
+					for(int i = 0; i < cur.size(); i++) {
+						mesh.addVertex(cur[i].position);
+					}
+				}
+			}
+		}
+		mesh.draw();
+		ofPopStyle();
+	}
 	vector<T*> getNeighborsRadius(const ofVec2f& position, float radius) {
 		vector<T*> neighbors;
 		int n, s, w, e;
