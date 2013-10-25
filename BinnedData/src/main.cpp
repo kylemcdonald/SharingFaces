@@ -31,7 +31,7 @@ public:
 	void draw() {
 		ofBackground(0);
 		glPointSize(2);
-		ofSetColor(64);
+		ofSetColor(32);
 		historyMesh.draw();
 		ofSetColor(255);
 		dataMesh.draw();

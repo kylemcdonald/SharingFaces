@@ -19,21 +19,21 @@ void drawFramerate() {
 float getMaximumDistance(ofVec2f& position, vector<ofVec2f*> positions) {
 	float maximumDistance = 0;
 	for(int i = 0; i < positions.size(); i++) {
-		float distance = position.distance(*positions[i]);
+		float distance = position.distanceSquared(*positions[i]);
 		if(distance > maximumDistance) {
 			maximumDistance = distance;
 		}
 	}
-	return maximumDistance;
+	return sqrt(maximumDistance);
 }
 
 float getMinimumDistance(ofVec2f& position, vector<ofVec2f*> positions) {
 	float minimumDistance = 0;
 	for(int i = 0; i < positions.size(); i++) {
-		float distance = position.distance(*positions[i]);
+		float distance = position.distanceSquared(*positions[i]);
 		if(i == 0 || distance < minimumDistance) {
 			minimumDistance = distance;
 		}
 	}
-	return minimumDistance;
+	return sqrt(minimumDistance);
 }
