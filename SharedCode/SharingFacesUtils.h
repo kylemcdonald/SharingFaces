@@ -5,6 +5,7 @@
 #include "FaceTrackerData.h"
 #include "BinnedData.h"
 #include "FaceCompare.h"
+#include "ImageSaver.h"
 
 using namespace ofxCv;
 using namespace cv;
@@ -37,10 +38,4 @@ float getMinimumDistance(ofVec2f& position, vector<ofVec2f*> positions) {
 		}
 	}
 	return sqrt(minimumDistance);
-}
-
-void saveFace(FaceTrackerData& data, const ofImage& img) {
-	string basePath = ofGetTimestampString("%Y.%m.%d/%H.%M.%S.%i");
-	data.save("metadata/" + basePath + ".face");
-//	img.saveImage("images/" + basePath + ".jpg");
 }

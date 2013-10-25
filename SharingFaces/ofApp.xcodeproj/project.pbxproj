@@ -106,6 +106,7 @@
 		273EC8BF1818F60800AEF7E2 /* FaceTrackerData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaceTrackerData.h; sourceTree = "<group>"; };
 		273EC8C01818F9C300AEF7E2 /* RawUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RawUtils.h; sourceTree = "<group>"; };
 		276C6315181A425B00D3BF55 /* FaceCompare.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FaceCompare.h; sourceTree = "<group>"; };
+		276C6318181A592100D3BF55 /* ImageSaver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageSaver.h; sourceTree = "<group>"; };
 		27DD084B1819005F007A30D6 /* SharingFacesUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SharingFacesUtils.h; sourceTree = "<group>"; };
 		27DD084D181949BA007A30D6 /* BinnedData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BinnedData.h; sourceTree = "<group>"; };
 		2E411F99E3AB7154484B4F96 /* kmeans_index.h */ = {isa = PBXFileReference; explicitFileType = sourcecode.c.h; fileEncoding = 30; name = kmeans_index.h; path = ../../../addons/ofxOpenCv/libs/opencv/include/opencv2/flann/kmeans_index.h; sourceTree = SOURCE_ROOT; };
@@ -402,6 +403,7 @@
 				27DD084B1819005F007A30D6 /* SharingFacesUtils.h */,
 				27DD084D181949BA007A30D6 /* BinnedData.h */,
 				276C6315181A425B00D3BF55 /* FaceCompare.h */,
+				276C6318181A592100D3BF55 /* ImageSaver.h */,
 			);
 			name = SharedCode;
 			path = ../SharedCode;

@@ -9,6 +9,7 @@ public:
 	ofxFaceTracker tracker;
 	BinnedData<FaceTrackerData> data;
 	FaceCompare faceCompare;
+	MultiThreadedImageSaver imageSaver;
 	
 	bool rotate;
 	int binSize;
@@ -85,9 +86,16 @@ public:
 		ofToString(tracker.getOrientation().x) + ", " + ofToString(tracker.getOrientation().y) + ", " + ofToString(tracker.getOrientation().z)  + "\n" +
 		ofToString(tracker.getScale());
 //		ofDrawBitmapStringHighlight(info, tracker.getPosition());
+		ofDrawBitmapStringHighlight(ofToString(imageSaver.getActiveThreads()), 10, 40);
 		drawFramerate();
 	}
 	void keyPressed(int key) {
+	}
+	
+	void saveFace(FaceTrackerData& data, ofImage& img) {
+		string basePath = ofGetTimestampString("%Y.%m.%d/%H.%M.%S.%i");
+		data.save("metadata/" + basePath + ".face");
+		imageSaver.saveImage(img.getPixelsRef(), "images/" + basePath + ".jpg");
 	}
 };
 
