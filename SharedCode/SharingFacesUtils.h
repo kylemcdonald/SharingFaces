@@ -2,6 +2,7 @@
 
 #include "ofxCv.h"
 #include "ofxFaceTracker.h"
+#include "ofxTiming.h"
 #include "FaceTrackerData.h"
 #include "BinnedData.h"
 #include "FaceCompare.h"

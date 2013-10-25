@@ -21,6 +21,9 @@ public:
 	string lastLabel;
 	ofImage similar;
 	
+	Hysteresis presence;
+	vector< pair<ofVec2f, FaceTrackerData> > currentData;
+	
 	void setup() {
 		useSharedData();
 		loadSettings();
@@ -32,6 +35,7 @@ public:
 			data.setup(camWidth, camHeight, binSize);
 		}
 		loadMetadata(data);
+		presence.setDelay(0, 10);
 		ofSetLogLevel(OF_LOG_VERBOSE);
 	}
 	void loadSettings() {
@@ -65,8 +69,15 @@ public:
 				}
 				if(faceCompare.different(curData, neighbors)) {
 					saveFace(curData, rotated);
-					data.add(position, curData);
+					currentData.push_back(pair<ofVec2f, FaceTrackerData>(position, curData));
 				}
+			}
+			presence.update(tracker.getFound());
+			if(presence.wasUntriggered()) {
+				for(int i = 0; i < currentData.size(); i++) {
+					data.add(currentData[i].first, currentData[i].second);
+				}
+				currentData.clear();
 			}
 		}
 	}
@@ -89,12 +100,6 @@ public:
 		nearestData.draw();
 		ofPopStyle();
 		
-		string info =
-		ofToString(tracker.getPosition().x) + "x" + ofToString(tracker.getPosition().y) + "\n" +
-		ofToString(tracker.getOrientation().x) + ", " + ofToString(tracker.getOrientation().y) + ", " + ofToString(tracker.getOrientation().z)  + "\n" +
-		ofToString(tracker.getScale());
-//		ofDrawBitmapStringHighlight(info, tracker.getPosition());
-		ofDrawBitmapStringHighlight(ofToString(imageSaver.getActiveThreads()), 10, 40);
 		drawFramerate();
 	}
 	void keyPressed(int key) {
