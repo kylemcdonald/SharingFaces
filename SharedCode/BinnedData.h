@@ -32,8 +32,9 @@ public:
 	}
 	void draw() {
 		ofPushStyle();
+		glPointSize(2);
 		ofNoFill();
-		ofSetColor(255);
+		ofSetColor(255, 64);
 		ofMesh mesh;
 		mesh.setMode(OF_PRIMITIVE_POINTS);
 		for(int y = 0; y < yBins; y++) {

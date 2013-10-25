@@ -72,4 +72,35 @@ public:
 		closestOrientation(target, data) * scaleOrientation > 1 ||
 		closestExpression(target, data) * scaleExpression > 1;
 	}
+	float distance(const FaceTrackerData& a, const FaceTrackerData& b) {
+		float distancePosition = a.position.distance(b.position);
+		float distanceScale =  abs(a.scale - b.scale);
+		float distanceOrientation = a.orientation.distance(b.orientation); // approximation
+		float distanceExpression = 0;
+		const vector<ofVec3f>& aobj = a.objectPoints, bobj = b.objectPoints;
+		for(int i = 0; i < aobj.size(); i++) {
+			distanceExpression += aobj[i].distanceSquared(bobj[i]);
+		}
+		distanceExpression = sqrt(distanceExpression);
+		distancePosition *= scalePosition;
+		distanceScale *= scaleScale;
+		distanceOrientation *= scaleOrientation;
+		distanceExpression *= scaleExpression;
+		return sqrt(distancePosition * distancePosition +
+					distanceScale * distanceScale +
+					distanceOrientation * distanceOrientation +
+					distanceExpression * distanceExpression);
+	}
+	FaceTrackerData* nearest(const FaceTrackerData& target, vector<FaceTrackerData*>& data) {
+		float closest = 0;
+		FaceTrackerData* closestData = NULL;
+		for(int i = 0; i < data.size(); i++) {
+			float distance = FaceCompare::distance(target, *data[i]);
+			if(i == 0 || distance < closest) {
+				closest = distance;
+				closestData = data[i];
+			}
+		}
+		return closestData;
+	}
 };

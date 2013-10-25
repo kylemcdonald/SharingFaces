@@ -17,15 +17,14 @@ public:
 	int neighborCount;
 	ofImage rotated;
 	
-	ofMesh historyMesh, dataMesh;
+	FaceTrackerData nearestData;
+	ofImage similar;
 	
 	void setup() {
 		useSharedData();
 		loadSettings();
 		tracker.setup();
 		cam.initGrabber(camWidth, camHeight, false);
-		historyMesh.setMode(OF_PRIMITIVE_POINTS);
-		dataMesh.setMode(OF_PRIMITIVE_POINTS);
 		if(rotate) {
 			data.setup(camHeight, camWidth, binSize);
 		} else {
@@ -55,12 +54,13 @@ public:
 				vector<FaceTrackerData*> neighbors = data.getNeighborsCount(position, neighborCount);
 				FaceTrackerData curData;
 				curData.load(tracker);
+				if(!neighbors.empty()) {
+					nearestData = *faceCompare.nearest(curData, neighbors);
+					//similar.loadImage(); // load nearest from disk, need to store paths in FaceTrackerData
+				}
 				if(faceCompare.different(curData, neighbors)) {
-					dataMesh.addVertex(position);
-					data.add(position, curData);
-					saveFace(curData, rotated);
-				} else {
-					historyMesh.addVertex(position);
+//					saveFace(curData, rotated);
+//					data.add(position, curData);
 				}
 			}
 		}
@@ -74,15 +74,12 @@ public:
 		ofNoFill();
 		ofCircle(tracker.getPosition(), 10);
 		
-		ofPushStyle();
-		glPointSize(4);
-		ofSetColor(32);
-		historyMesh.draw();
-		ofSetColor(255);
-		dataMesh.draw();
-		ofPopStyle();
-		
 		data.draw();
+		
+		ofPushStyle();
+		ofSetColor(255, 0, 0);
+		nearestData.draw();
+		ofPopStyle();
 		
 		string info =
 		ofToString(tracker.getPosition().x) + "x" + ofToString(tracker.getPosition().y) + "\n" +
