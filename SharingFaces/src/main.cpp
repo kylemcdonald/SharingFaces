@@ -12,7 +12,7 @@ public:
 	
 	bool rotate;
 	int binSize;
-	float neighborRadius = 100;
+	float neighborRadius;
 	int neighborCount;
 	ofImage rotated;
 	
@@ -35,6 +35,7 @@ public:
 	void loadSettings() {
 		rotate = false;
 		binSize = 10;
+		neighborRadius = 20;
 		neighborCount = 100;
 	}
 	void update() {
@@ -46,15 +47,18 @@ public:
 			tracker.update(rotatedMat);
 			if(tracker.getFound()) {
 				ofVec2f position = tracker.getPosition();
-				historyMesh.addVertex(position);
-				// this should be radius but capped at a maximum count
-				// or count capped at a maximum radius, whicever is more efficient
-				vector<FaceTrackerData*> neighbors = data.getNeighborsRadius(position, neighborRadius);
+				// should be count capped at a maximum radius
+				// maximum count is to ensure we don't spend too much time searching
+				// maximum radius is to ensure sparse areas don't search far away
+				vector<FaceTrackerData*> neighbors = data.getNeighborsCount(position, neighborCount);
 				FaceTrackerData curData;
 				curData.load(tracker);
 				if(faceCompare.different(curData, neighbors)) {
 					dataMesh.addVertex(position);
 					data.add(position, curData);
+					cout << "added ";
+				} else {
+					historyMesh.addVertex(position);
 				}
 			}
 		}
