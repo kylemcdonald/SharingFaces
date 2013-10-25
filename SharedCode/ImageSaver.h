@@ -19,7 +19,7 @@ public:
     queue<QueuedImage> queue;
     void threadedFunction() {
         while(isThreadRunning() && !queue.empty()) {
-			ofSaveImage(queue.front().image, queue.front().filename);
+			ofSaveImage(queue.front().image, queue.front().filename, OF_IMAGE_QUALITY_HIGH);
 			queue.pop();
         }
     }

@@ -2,15 +2,24 @@
 
 #include "SharingFacesUtils.h"
 
+//#define INSTALL
+
 class ofApp : public ofBaseApp {
 public:
+#ifdef INSTALL
+	static const int camWidth = 1920, camHeight = 1080;
+	ofxBlackmagicGrabber cam;
+#else
 	static const int camWidth = 1280, camHeight = 720;
 	ofVideoGrabber cam;
+	ofShader shader;
+#endif
 	ofxFaceTracker tracker;
 	BinnedData<FaceTrackerData> data;
 	FaceCompare faceCompare;
-	MultiThreadedImageSaver imageSaver;
+	ThreadedImageSaver imageSaver;
 	
+	bool useBlackMagic;
 	bool rotate;
 	int binSize;
 	float neighborRadius;
@@ -25,10 +34,18 @@ public:
 	vector< pair<ofVec2f, FaceTrackerData> > currentData;
 	
 	void setup() {
+#ifndef INSTALL
 		useSharedData();
+#endif
 		loadSettings();
 		tracker.setup();
+#ifdef INSTALL
+		cam.setVideoMode(bmdModeHD1080p30);
+		cam.setDeinterlace(false);
+		cam.initGrabber(camWidth, camHeight);
+#else
 		cam.initGrabber(camWidth, camHeight, false);
+#endif
 		if(rotate) {
 			data.setup(camHeight, camWidth, binSize);
 		} else {
@@ -36,10 +53,15 @@ public:
 		}
 		loadMetadata(data);
 		presence.setDelay(0, 10);
+		shader.load("shaders/colorbalance.vs", "shaders/colorbalance.fs");
 		ofSetLogLevel(OF_LOG_VERBOSE);
 	}
 	void loadSettings() {
+#ifdef INSTALL
+		rotate = true;
+#else
 		rotate = false;
+#endif
 		binSize = 10;
 		neighborRadius = 20;
 		neighborCount = 100;
@@ -47,9 +69,9 @@ public:
 	void update() {
 		cam.update();
 		if(cam.isFrameNew()) {
-			ofxCv::rotate90(cam, rotated, rotate ? 90 : 0);
+			// next two could be replaced with one line
+			ofxCv::rotate90(cam, rotated, rotate ? 270 : 0);
 			ofxCv:flip(rotated, rotated, 1);
-			rotated.update();
 			Mat rotatedMat = toCv(rotated);
 			tracker.update(rotatedMat);
 			if(tracker.getFound()) {
@@ -83,11 +105,11 @@ public:
 	}
 	void draw() {
 		ofSetColor(255);
-		if(rotated.isAllocated()) {
-			rotated.draw(0, 0);
-		}
 		if(similar.isAllocated()) {
+			shader.begin();
+			shader.setUniformTexture("tex", similar, 0);
 			similar.draw(0, 0);
+			shader.end();
 		}
 		tracker.draw();
 		ofNoFill();
@@ -103,6 +125,9 @@ public:
 		drawFramerate();
 	}
 	void keyPressed(int key) {
+		if(key == 'f') {
+			ofToggleFullscreen();
+		}
 	}
 	
 	void saveFace(FaceTrackerData& data, ofImage& img) {
