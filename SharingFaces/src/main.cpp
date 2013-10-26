@@ -12,8 +12,8 @@ public:
 #else
 	static const int camWidth = 1280, camHeight = 720;
 	ofVideoGrabber cam;
-	ofShader shader;
 #endif
+	ofShader shader;
 	ofxFaceTracker tracker;
 	BinnedData<FaceTrackerData> data;
 	FaceCompare faceCompare;
@@ -54,6 +54,7 @@ public:
 		loadMetadata(data);
 		presence.setDelay(0, 10);
 		shader.load("shaders/colorbalance.vs", "shaders/colorbalance.fs");
+		ofDisableAntiAliasing();
 		ofSetLogLevel(OF_LOG_VERBOSE);
 	}
 	void loadSettings() {
@@ -122,7 +123,9 @@ public:
 		nearestData.draw();
 		ofPopStyle();
 		
+#ifndef INSTALL
 		drawFramerate();
+#endif
 	}
 	void keyPressed(int key) {
 		if(key == 'f') {

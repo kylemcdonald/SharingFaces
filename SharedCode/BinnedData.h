@@ -14,6 +14,8 @@ protected:
 		y = ofClamp(position.y / binSize, 0, yBins - 1);
 	}
 	
+	ofMesh dataMesh, binMesh;
+	
 public:
 	BinnedData()
 	:totalElements(0) {
@@ -23,32 +25,35 @@ public:
 		this->binSize = binSize;
 		this->xBins = 1 + width / binSize, this->yBins = 1 + height / binSize;
 		data = vector< vector< vector<T> > >(yBins, vector< vector<T> >(xBins, vector<T>()));
+		dataMesh.setMode(OF_PRIMITIVE_POINTS);
+		binMesh.setMode(OF_PRIMITIVE_LINES);
 	}
 	void add(const ofVec2f& position, T& element) {
 		int x, y;
 		bin(position, x, y);
+		dataMesh.addVertex(position);
+		if(data[y][x].empty()) {
+			int w = x * binSize, e = (x + 1) * binSize;
+			int n = y * binSize, s = (y + 1) * binSize;
+			binMesh.addVertex(ofVec2f(w, n));
+			binMesh.addVertex(ofVec2f(e, n));
+			binMesh.addVertex(ofVec2f(e, n));
+			binMesh.addVertex(ofVec2f(e, s));
+			binMesh.addVertex(ofVec2f(e, s));
+			binMesh.addVertex(ofVec2f(w, s));
+			binMesh.addVertex(ofVec2f(w, s));
+			binMesh.addVertex(ofVec2f(w, n));
+		}
 		data[y][x].push_back(element);
 		totalElements++;
 	}
 	void draw() {
 		ofPushStyle();
-		glPointSize(2);
 		ofNoFill();
 		ofSetColor(255, 64);
-		ofMesh mesh;
-		mesh.setMode(OF_PRIMITIVE_POINTS);
-		for(int y = 0; y < yBins; y++) {
-			for(int x = 0; x < xBins; x++) {
-				vector<T>& cur = data[y][x];
-				if(!cur.empty()) {
-					ofRect(x * binSize, y * binSize, binSize, binSize);
-					for(int i = 0; i < cur.size(); i++) {
-						mesh.addVertex(cur[i].position);
-					}
-				}
-			}
-		}
-		mesh.draw();
+		glPointSize(2);
+		binMesh.draw();
+		dataMesh.draw();
 		ofPopStyle();
 	}
 	vector<T*> getNeighborsRadius(const ofVec2f& position, float radius) {
