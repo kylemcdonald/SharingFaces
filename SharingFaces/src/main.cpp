@@ -14,7 +14,7 @@ public:
 	ofVideoGrabber cam;
 #endif
 	ofShader shader;
-	ofxFaceTrackerThreaded tracker;
+	ofxFaceTracker tracker;
 	BinnedData<FaceTrackerData> data;
 	FaceCompare faceCompare;
 	ThreadedImageSaver imageSaver;
@@ -97,7 +97,7 @@ public:
 					}
 					lastLabel = nearestData.label;
 				}
-				if(faceCompare.different(curData, neighbors)) {
+				if(faceCompare.different(curData, currentData) && faceCompare.different(curData, neighbors)) {
 					saveFace(curData, rotated);
 					currentData.push_back(pair<ofVec2f, FaceTrackerData>(position, curData));
 				}

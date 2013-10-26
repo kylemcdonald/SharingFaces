@@ -62,6 +62,13 @@ public:
 		}
 		return sqrt(closest);
 	}
+	bool different(const FaceTrackerData& target, vector< pair<ofVec2f, FaceTrackerData> >& data) {
+		vector<FaceTrackerData*> all;
+		for(int i = 0; i < data.size(); i++) {
+			all.push_back(&data[i].second);
+		}
+		return different(target, all);
+	}
 	bool different(const FaceTrackerData& target, const vector<FaceTrackerData*>& data) {
 		if(data.empty()) {
 			return true;

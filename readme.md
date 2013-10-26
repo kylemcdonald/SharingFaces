@@ -26,13 +26,15 @@ The easiest way to implement the above is by doing all the distance checks at ea
 
 ### Code
 
-* Optimize face tracking parameters
+* Ensure that it's harder to have metadata without an image.
+* Optimize face tracking parameters, especially min haar size
 * Fix camera latency
-* Use eye center instead of face center
+* Use eye center instead of face center?
 * Add config file and multiple city support
 * Do benchmarks on different parts of the code to understand speed and scaling constraints
 * Optimize search function
 * Optimize JPG saving and loading, see [libjpeg-turbo](http://libjpeg-turbo.virtualgl.org/) saving is pretty fast, but loading on GPU?
+* Fix JPG saving crash on exit, and ofxBlackMagicGrabber crash on exit
 * Abstract the data representation out of ofxFaceTracker
 * Check if FaceTracker can be run faster using [clang-omp](http://clang-omp.github.io/)
 
