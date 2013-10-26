@@ -50,8 +50,7 @@ public:
 	void draw() {
 		ofPushStyle();
 		ofNoFill();
-		ofSetColor(255, 64);
-		glPointSize(2);
+		ofSetLineWidth(1);
 		binMesh.draw();
 		dataMesh.draw();
 		ofPopStyle();

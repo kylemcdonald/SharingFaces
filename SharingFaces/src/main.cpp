@@ -2,7 +2,7 @@
 
 #include "SharingFacesUtils.h"
 
-//#define INSTALL
+#define INSTALL
 
 class ofApp : public ofBaseApp {
 public:
@@ -14,7 +14,7 @@ public:
 	ofVideoGrabber cam;
 #endif
 	ofShader shader;
-	ofxFaceTracker tracker;
+	ofxFaceTrackerThreaded tracker;
 	BinnedData<FaceTrackerData> data;
 	FaceCompare faceCompare;
 	ThreadedImageSaver imageSaver;
@@ -31,6 +31,7 @@ public:
 	ofImage similar;
 	
 	Hysteresis presence;
+	FadeTimer presenceFade;
 	vector< pair<ofVec2f, FaceTrackerData> > currentData;
 	
 	void setup() {
@@ -38,6 +39,10 @@ public:
 		useSharedData();
 #endif
 		loadSettings();
+		tracker.setIterations(5);
+		tracker.setClamp(2);
+		tracker.setAttempts(3);
+		tracker.setRescale(.5);
 		tracker.setup();
 #ifdef INSTALL
 		cam.setVideoMode(bmdModeHD1080p30);
@@ -52,9 +57,12 @@ public:
 			data.setup(camWidth, camHeight, binSize);
 		}
 		loadMetadata(data);
-		presence.setDelay(0, 10);
+		presence.setDelay(0, 4);
+		presenceFade.setLength(4, .1);
 		shader.load("shaders/colorbalance.vs", "shaders/colorbalance.fs");
 		ofDisableAntiAliasing();
+		glPointSize(2);
+		ofSetLineWidth(3);
 		ofSetLogLevel(OF_LOG_VERBOSE);
 	}
 	void loadSettings() {
@@ -74,8 +82,7 @@ public:
 			ofxCv::rotate90(cam, rotated, rotate ? 270 : 0);
 			ofxCv:flip(rotated, rotated, 1);
 			Mat rotatedMat = toCv(rotated);
-			tracker.update(rotatedMat);
-			if(tracker.getFound()) {
+			if(tracker.update(rotatedMat))  {
 				ofVec2f position = tracker.getPosition();
 				// should be count capped at a maximum radius
 				// maximum count is to ensure we don't spend too much time searching
@@ -96,15 +103,21 @@ public:
 				}
 			}
 			presence.update(tracker.getFound());
+			if(presence.wasTriggered()) {
+				presenceFade.stop();
+			}
 			if(presence.wasUntriggered()) {
 				for(int i = 0; i < currentData.size(); i++) {
 					data.add(currentData[i].first, currentData[i].second);
 				}
 				currentData.clear();
+				presenceFade.start();
 			}
 		}
 	}
 	void draw() {
+		ofBackground(255);
+		CGDisplayHideCursor(NULL);
 		ofSetColor(255);
 		if(similar.isAllocated()) {
 			shader.begin();
@@ -112,15 +125,22 @@ public:
 			similar.draw(0, 0);
 			shader.end();
 		}
-		tracker.draw();
-		ofNoFill();
-		ofCircle(tracker.getPosition(), 10);
-		
-		data.draw();
-		
 		ofPushStyle();
-		ofSetColor(255, 0, 0);
+		if(presenceFade.getActive()) {
+			ofSetColor(0, ofMap(presenceFade.get(), 0, 1, 0, 128));
+			ofFill();
+			ofRect(0, 0, ofGetWidth(), ofGetHeight());
+			ofSetColor(255, ofMap(presenceFade.get(), 0, 1, 0, 128));
+			data.draw();
+		}
+		ofSetColor(255, 64);
 		nearestData.draw();
+		ofSetColor(255, 128);
+		ofNoFill();
+		if(!tracker.getFound()) {
+			ofCircle(tracker.getPosition(), 10);
+		}
+		tracker.draw();
 		ofPopStyle();
 		
 #ifndef INSTALL
@@ -141,6 +161,10 @@ public:
 };
 
 int main() {
+#ifdef INSTALL
+	ofSetupOpenGL(1080, 1920, OF_FULLSCREEN);
+#else
 	ofSetupOpenGL(1280, 720, OF_WINDOW);
+#endif
 	ofRunApp(new ofApp());
 }

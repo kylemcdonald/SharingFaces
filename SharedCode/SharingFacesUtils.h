@@ -2,7 +2,7 @@
 
 #include "ofxCv.h"
 #include "ofxBlackMagicGrabber.h"
-#include "ofxFaceTracker.h"
+#include "ofxFaceTrackerTHreaded.h"
 #include "ofxTiming.h"
 #include "FaceTrackerData.h"
 #include "BinnedData.h"
