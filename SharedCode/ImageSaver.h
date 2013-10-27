@@ -1,5 +1,3 @@
-// sometimes has an error on exit
-
 #pragma once
 
 #include "ofMain.h"
@@ -15,20 +13,39 @@ public:
 };
 
 class ThreadedImageSaver : public ofThread {
+private:
+    queue< ofPtr<QueuedImage> > queue;
 public:
-    queue<QueuedImage> queue;
     void threadedFunction() {
-        while(isThreadRunning() && !queue.empty()) {
-			ofSaveImage(queue.front().image, queue.front().filename, OF_IMAGE_QUALITY_HIGH);
+        while(!queue.empty()) {
+			if(!isThreadRunning()) {
+				ofLogWarning("ThreadedImageSaver") << queue.size() << " images left to save";
+			}
+			ofPtr<QueuedImage> cur = queue.front();
+			ofSaveImage(cur->image, cur->filename, OF_IMAGE_QUALITY_HIGH);
+			lock();
 			queue.pop();
+			unlock();
         }
     }
     void saveImage(ofPixels& img, string filename) {
-		queue.push(QueuedImage(img, filename));
+		ofPtr<QueuedImage> cur(new QueuedImage(img, filename));
+		lock();
+		queue.push(cur);
+		unlock();
 		if(!isThreadRunning()){
 			startThread();
 		}
     }
+	int getQueueSize() {
+		lock();
+		int size = queue.size();
+		unlock();
+		return size;
+	}
+	void exit() {
+		waitForThread();
+	}
 };
 
 class MultiThreadedImageSaver {
@@ -46,13 +63,16 @@ public:
 		threads[currentThread]->saveImage(img, filename);
 		currentThread = (currentThread + 1) % threads.size();
 	}
-	int getActiveThreads() {
-		int active = 0;
+	int getQueueSize() {
+		int size = 0;
 		for(int i = 0; i < threads.size(); i++) {
-			if(threads[i]->isThreadRunning()) {
-				active++;
-			}
+			size += threads[i]->getQueueSize();
 		}
-		return active;
+		return size;
+	}
+	void exit() {
+		for(int i = 0; i < threads.size(); i++) {
+			threads[i]->waitForThread();
+		}
 	}
 };

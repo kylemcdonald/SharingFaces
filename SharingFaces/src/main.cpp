@@ -17,7 +17,7 @@ public:
 	ofxFaceTracker tracker;
 	BinnedData<FaceTrackerData> data;
 	FaceCompare faceCompare;
-	ThreadedImageSaver imageSaver;
+	MultiThreadedImageSaver imageSaver;
 	
 	bool useBlackMagic;
 	bool rotate;
@@ -64,6 +64,9 @@ public:
 		glPointSize(2);
 		ofSetLineWidth(3);
 		ofSetLogLevel(OF_LOG_VERBOSE);
+	}
+	void exit() {
+		imageSaver.exit();
 	}
 	void loadSettings() {
 #ifdef INSTALL

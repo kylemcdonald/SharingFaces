@@ -26,7 +26,9 @@ The easiest way to implement the above is by doing all the distance checks at ea
 
 ### Code
 
-* Ensure that it's harder to have metadata without an image.
+* Setup remote access via vnc
+* Make sure it doesn't crash, and restarts when it does, runs when the computer stars also
+* Ensure that it's harder to have metadata without an image (consider saving metadata in jpeg exif) delete things that are missing pairs on startup
 * Optimize face tracking parameters, especially min haar size
 * Fix camera latency
 * Use eye center instead of face center?
