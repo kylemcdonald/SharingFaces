@@ -12,6 +12,8 @@
 using namespace ofxCv;
 using namespace cv;
 
+#define CLEAN_METADATA
+
 void useSharedData() {
 	ofSetDataPathRoot("../../../../../SharedData/");
 }
@@ -51,8 +53,14 @@ void loadMetadata(BinnedData<FaceTrackerData>& data) {
 		string curDateName = "metadata/" + allDates[i].getFileName() + "/";
 		for(int j = 0; j < curDate.size(); j++) {
 			FaceTrackerData curData;
-			curData.load(curDateName + curDate[j].getFileName());
-			data.add(curData.position, curData);
+			string metadataFilename = curDateName + curDate[j].getFileName();
+			curData.load(metadataFilename);
+			if(ofFile::doesFileExist(curData.getImageFilename())) {
+				data.add(curData.position, curData);
+			} else {
+				ofLogWarning() << "removing metadata " << metadataFilename;
+				ofFile::removeFile(metadataFilename);
+			}
 		}
 	}
 }

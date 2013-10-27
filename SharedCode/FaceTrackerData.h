@@ -67,4 +67,7 @@ public:
 		}
 		mesh.draw();
 	}
+	string getImageFilename() const {
+		return "images/" + label + ".jpg";
+	}
 };

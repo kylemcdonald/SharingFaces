@@ -2,7 +2,7 @@
 
 #include "SharingFacesUtils.h"
 
-#define INSTALL
+//#define INSTALL
 
 class ofApp : public ofBaseApp {
 public:
@@ -96,7 +96,7 @@ public:
 				if(!neighbors.empty()) {
 					nearestData = *faceCompare.nearest(curData, neighbors);
 					if(nearestData.label != lastLabel) {
-						similar.loadImage("images/" + nearestData.label + ".jpg");
+						similar.loadImage(nearestData.getImageFilename());
 					}
 					lastLabel = nearestData.label;
 				}
