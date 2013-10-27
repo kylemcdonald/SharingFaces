@@ -12,8 +12,6 @@
 using namespace ofxCv;
 using namespace cv;
 
-#define CLEAN_METADATA
-
 void useSharedData() {
 	ofSetDataPathRoot("../../../../../SharedData/");
 }

@@ -26,17 +26,20 @@ The easiest way to implement the above is by doing all the distance checks at ea
 
 ### Code
 
-* Setup remote access via vnc
-* Make sure it doesn't crash, and restarts when it does, runs when the computer stars also
-* Ensure that it's harder to have metadata without an image (consider saving metadata in jpeg exif) delete things that are missing pairs on startup
+* Setup remote access (need to configure network ports)
+* Make sure it doesn't crash, and restarts when it does, runs when the computer starts, restarts at 4am, screen is on during apap hours. switch for lights would be good to avoid cable movement.
+* Measure everything
+* Ensure that it's harder to have metadata without an image (consider saving metadata in jpeg exif)
 * Optimize face tracking parameters, especially min haar size
 * Fix camera latency
+* Make ofxFaceTracker threading work correctly
 * Use eye center instead of face center?
 * Add config file and multiple city support
 * Do benchmarks on different parts of the code to understand speed and scaling constraints
-* Optimize search function
+* Optimize search function?
 * Optimize JPG saving and loading, see [libjpeg-turbo](http://libjpeg-turbo.virtualgl.org/) saving is pretty fast, but loading on GPU?
-* Fix JPG saving crash on exit, and ofxBlackMagicGrabber crash on exit
+* Export statistics about how many frames are saved and how many are dropped for each visitor
+* Fix ofxBlackMagicGrabber crash on exit
 * Abstract the data representation out of ofxFaceTracker
 * Check if FaceTracker can be run faster using [clang-omp](http://clang-omp.github.io/)
 

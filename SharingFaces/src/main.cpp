@@ -2,7 +2,7 @@
 
 #include "SharingFacesUtils.h"
 
-//#define INSTALL
+#define INSTALL
 
 class ofApp : public ofBaseApp {
 public:
@@ -59,6 +59,7 @@ public:
 		loadMetadata(data);
 		presence.setDelay(0, 4);
 		presenceFade.setLength(4, .1);
+		presenceFade.start();
 		shader.load("shaders/colorbalance.vs", "shaders/colorbalance.fs");
 		ofDisableAntiAliasing();
 		glPointSize(2);
@@ -67,6 +68,9 @@ public:
 	}
 	void exit() {
 		imageSaver.exit();
+#ifdef INSTALL
+		cam.close();
+#endif
 	}
 	void loadSettings() {
 #ifdef INSTALL
@@ -159,15 +163,19 @@ public:
 	void saveFace(FaceTrackerData& data, ofImage& img) {
 		string basePath = ofGetTimestampString("%Y.%m.%d/%H.%M.%S.%i");
 		data.save("metadata/" + basePath + ".face");
-		imageSaver.saveImage(img.getPixelsRef(), "images/" + basePath + ".jpg");
+		imageSaver.saveImage(img.getPixelsRef(), data.getImageFilename());
 	}
 };
 
+#include "ofAppGlutWindow.h"
+
 int main() {
 #ifdef INSTALL
-	ofSetupOpenGL(1080, 1920, OF_FULLSCREEN);
+	ofSetupOpenGL(ofPtr<ofAppBaseWindow>(new ofAppGlutWindow()), 1080, 1920, OF_FULLSCREEN);
+//	ofSetupOpenGL(1080, 1920, OF_FULLSCREEN);
 #else
-	ofSetupOpenGL(1280, 720, OF_WINDOW);
+	ofSetupOpenGL(ofPtr<ofAppBaseWindow>(new ofAppGlutWindow()), 1280, 720, OF_WINDOW);
+//	ofSetupOpenGL(1280, 720, OF_WINDOW);
 #endif
 	ofRunApp(new ofApp());
 }
