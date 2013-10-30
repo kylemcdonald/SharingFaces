@@ -29,6 +29,7 @@ public:
 	FaceTrackerData nearestData;
 	string lastLabel;
 	ofImage similar;
+	ofVec3f whitePoint;
 	
 	Hysteresis presence;
 	FadeTimer presenceFade;
@@ -39,11 +40,15 @@ public:
 		useSharedData();
 #endif
 		loadSettings();
-		tracker.setIterations(5);
-		tracker.setClamp(2);
-		tracker.setAttempts(3);
-		tracker.setRescale(.5);
+		
 		tracker.setup();
+		tracker.setHaarMinSize(175);
+		tracker.setRescale(.25);
+		tracker.setIterations(3);
+		tracker.setTolerance(2);
+		tracker.setClamp(3);
+		tracker.setAttempts(4);
+		
 #ifdef INSTALL
 		cam.setup(camWidth, camHeight, 30);
 #else
@@ -96,9 +101,6 @@ public:
 			Mat rotatedMat = toCv(rotated);
 			if(tracker.update(rotatedMat))  {
 				ofVec2f position = tracker.getPosition();
-				// should be count capped at a maximum radius
-				// maximum count is to ensure we don't spend too much time searching
-				// maximum radius is to ensure sparse areas don't search far away
 				vector<FaceTrackerData*> neighbors = data.getNeighborsCount(position, neighborCount);
 				FaceTrackerData curData;
 				curData.load(tracker);
@@ -106,6 +108,11 @@ public:
 					nearestData = *faceCompare.nearest(curData, neighbors);
 					if(nearestData.label != lastLabel) {
 						similar.loadImage(nearestData.getImageFilename());
+#ifdef INSTALL
+						whitePoint = getWhitePoint(similar);
+#else
+						whitePoint.set(1, 1, 1);
+#endif
 					}
 					lastLabel = nearestData.label;
 				}
@@ -134,6 +141,7 @@ public:
 		if(similar.isAllocated()) {
 			shader.begin();
 			shader.setUniformTexture("tex", similar, 0);
+			shader.setUniform3fv("whitePoint", (float*) &whitePoint);
 			similar.draw(0, 0);
 			shader.end();
 		}
@@ -147,9 +155,7 @@ public:
 			ofSetColor(255, ofMap(presenceFade.get(), 0, 1, 0, 64));
 			data.drawData();
 		}
-//		ofSetColor(255, 64);
-//		nearestData.draw();
-		ofSetColor(255, 128);
+		ofSetColor(255, 64);
 		ofNoFill();
 		if(!tracker.getFound()) {
 			ofCircle(tracker.getPosition(), 10);

@@ -24,6 +24,8 @@ The easiest way to implement the above is by doing all the distance checks at ea
 
 ## Todo
 
+* Somehow ignore the period of time where the lights are off. Either have the computer turn off automatically or add conditions to the code to not consider that time period.
+* Drop duplicates from the first day.
 * Make sure it restarts when it crashes, screen is on during apap hours. switch for lights would be good to avoid cable movement.
 * White balance to the colors at the top right and top left
 * Measure distances to everything
