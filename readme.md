@@ -24,21 +24,24 @@ The easiest way to implement the above is by doing all the distance checks at ea
 
 ## Todo
 
-* Somehow ignore the period of time where the lights are off. Either have the computer turn off automatically or add conditions to the code to not consider that time period.
-* Drop duplicates from the first day.
-* Make sure it restarts when it crashes, screen is on during apap hours. switch for lights would be good to avoid cable movement.
-* White balance to the colors at the top right and top left
+### Necessary
+
 * Measure distances to everything
-* Optimize face tracking parameters, especially min haar size.
+* Add config file and multiple city support, handle syncing with rsync.
+* Export statistics about how many frames are saved and how many are dropped for each visitor.
+
+### Extra
+
+* Make sure it restarts when it crashes. switch for lights would be good to avoid cable movement.
+* Consider saving metadata in jpeg exif.
+* Drop duplicates from the first day.
+* Abstract the data representation out of ofxFaceTracker
+
+### Optimizations
+
 * Only do YUV conversion when saving to disk, or maybe there is a library that will generate jpegs from raw YUV.
 * Resize grayscale image from camera before transposing and flipping to save operations.
-* Use eye center instead of face center?
-* Add config file and multiple city support, handle syncing with rsync.
-* Consider saving metadata in jpeg exif.
 * Do benchmarks on different parts of the code to understand speed and scaling constraints
 * Optimize search function?
 * Optimize JPG saving and loading, see [libjpeg-turbo](http://libjpeg-turbo.virtualgl.org/) saving is pretty fast, but loading on GPU?
-* Export statistics about how many frames are saved and how many are dropped for each visitor
-* Fix ofxBlackMagicGrabber crash on exit
-* Abstract the data representation out of ofxFaceTracker
 * Check if FaceTracker can be run faster using [clang-omp](http://clang-omp.github.io/)
