@@ -8,13 +8,13 @@ class ofApp : public ofBaseApp {
 public:
 #ifdef INSTALL
 	static const int camWidth = 1920, camHeight = 1080;
-	ofxBlackmagicGrabber cam;
+	ofxBlackMagic cam;
 #else
 	static const int camWidth = 1280, camHeight = 720;
 	ofVideoGrabber cam;
 #endif
 	ofShader shader;
-	ofxFaceTracker tracker;
+	ofxFaceTrackerThreaded tracker;
 	BinnedData<FaceTrackerData> data;
 	FaceCompare faceCompare;
 	MultiThreadedImageSaver imageSaver;
@@ -45,9 +45,7 @@ public:
 		tracker.setRescale(.5);
 		tracker.setup();
 #ifdef INSTALL
-		cam.setVideoMode(bmdModeHD1080p30);
-		cam.setDeinterlace(false);
-		cam.initGrabber(camWidth, camHeight);
+		cam.setup(camWidth, camHeight, 30);
 #else
 		cam.initGrabber(camWidth, camHeight, false);
 #endif
@@ -68,6 +66,7 @@ public:
 	}
 	void exit() {
 		imageSaver.exit();
+		tracker.stopThread();
 #ifdef INSTALL
 		cam.close();
 #endif
@@ -83,10 +82,16 @@ public:
 		neighborCount = 100;
 	}
 	void update() {
+#ifdef INSTALL
+		if(cam.update()) {
+			ofPixels& pixels = cam.getColorPixels();
+#else
 		cam.update();
 		if(cam.isFrameNew()) {
+			ofPixels& pixels = cam.getPixelsRef();
+#endif
 			// next two could be replaced with one line
-			ofxCv::rotate90(cam, rotated, rotate ? 270 : 0);
+			ofxCv::rotate90(pixels, rotated, rotate ? 270 : 0);
 			ofxCv:flip(rotated, rotated, 1);
 			Mat rotatedMat = toCv(rotated);
 			if(tracker.update(rotatedMat))  {
@@ -140,8 +145,8 @@ public:
 			ofSetColor(255, ofMap(presenceFade.get(), 0, 1, 0, 128));
 			data.draw();
 		}
-		ofSetColor(255, 64);
-		nearestData.draw();
+//		ofSetColor(255, 64);
+//		nearestData.draw();
 		ofSetColor(255, 128);
 		ofNoFill();
 		if(!tracker.getFound()) {

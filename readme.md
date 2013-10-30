@@ -24,17 +24,16 @@ The easiest way to implement the above is by doing all the distance checks at ea
 
 ## Todo
 
-### Code
-
-* Setup remote access (need to configure network ports)
-* Make sure it doesn't crash, and restarts when it does, runs when the computer starts, restarts at 4am, screen is on during apap hours. switch for lights would be good to avoid cable movement.
-* Measure everything
+* render bins with lighter alpha
+* Make sure it restarts when it crashes, screen is on during apap hours. switch for lights would be good to avoid cable movement.
+* White balance to the colors at the top right and top left
+* Measure distances to everything
 * Ensure that it's harder to have metadata without an image (consider saving metadata in jpeg exif)
-* Optimize face tracking parameters, especially min haar size
-* Fix camera latency
-* Make ofxFaceTracker threading work correctly
+* Optimize face tracking parameters, especially min haar size.
+* Only do YUV conversion when saving to disk, or maybe there is a library that will generate jpegs from raw YUV.
+* Resize grayscale image from camera before transposing and flipping to save operations.
 * Use eye center instead of face center?
-* Add config file and multiple city support
+* Add config file and multiple city support, handle syncing with rsync.
 * Do benchmarks on different parts of the code to understand speed and scaling constraints
 * Optimize search function?
 * Optimize JPG saving and loading, see [libjpeg-turbo](http://libjpeg-turbo.virtualgl.org/) saving is pretty fast, but loading on GPU?
@@ -42,8 +41,3 @@ The easiest way to implement the above is by doing all the distance checks at ea
 * Fix ofxBlackMagicGrabber crash on exit
 * Abstract the data representation out of ofxFaceTracker
 * Check if FaceTracker can be run faster using [clang-omp](http://clang-omp.github.io/)
-
-### Hardware
-
-* Find replacement 12V power supply
-* Find replacement BNC cable

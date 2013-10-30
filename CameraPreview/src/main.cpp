@@ -1,27 +1,24 @@
 #include "ofMain.h"
-#include "ofxBlackmagicGrabber.h"
+#include "ofxBlackMagic.h"
 
 class ofApp : public ofBaseApp {
 public:
-	ofxBlackmagicGrabber cam;
+	ofxBlackMagic cam;
 	ofImage img;
 	
 	void setup() {
-		cam.setVideoMode(bmdModeHD1080p30);
-		cam.setDeinterlace(false);
-		cam.initGrabber(1920, 1080);
+		cam.setup(1920, 1080, 30);
+	}
+	void exit() {
+		cam.close();
 	}
 	void update() {
 		cam.update();
-		if(cam.isFrameNew()) {
-			img.setFromPixels(cam.getPixelsRef());
-			img.update();
-		}
 	}
 	void draw() {
 		ofRotate(-90);
 		ofTranslate(-ofGetHeight(), 0);
-		img.draw(0, 0);
+		cam.drawColor();
 	}
 	void keyPressed(int key) {
 		if(key == 'f') {
@@ -31,6 +28,6 @@ public:
 };
 
 int main() {
-	ofSetupOpenGL(1080, 1920, OF_WINDOW);
+	ofSetupOpenGL(1080, 1920, OF_FULLSCREEN);
 	ofRunApp(new ofApp());
 }

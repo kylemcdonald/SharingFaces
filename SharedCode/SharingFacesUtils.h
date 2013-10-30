@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ofxCv.h"
-#include "ofxBlackMagicGrabber.h"
+#include "ofxBlackMagic.h"
 #include "ofxFaceTrackerTHreaded.h"
 #include "ofxTiming.h"
 #include "FaceTrackerData.h"
