@@ -142,8 +142,10 @@ public:
 			ofSetColor(0, ofMap(presenceFade.get(), 0, 1, 0, 128));
 			ofFill();
 			ofRect(0, 0, ofGetWidth(), ofGetHeight());
-			ofSetColor(255, ofMap(presenceFade.get(), 0, 1, 0, 128));
-			data.draw();
+			ofSetColor(255, ofMap(presenceFade.get(), 0, 1, 0, 32));
+			data.drawBins();
+			ofSetColor(255, ofMap(presenceFade.get(), 0, 1, 0, 64));
+			data.drawData();
 		}
 //		ofSetColor(255, 64);
 //		nearestData.draw();

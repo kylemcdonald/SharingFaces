@@ -47,13 +47,15 @@ public:
 		data[y][x].push_back(element);
 		totalElements++;
 	}
-	void draw() {
+	void drawBins() {
 		ofPushStyle();
 		ofNoFill();
 		ofSetLineWidth(1);
 		binMesh.draw();
-		dataMesh.draw();
 		ofPopStyle();
+	}
+	void drawData() {
+		dataMesh.draw();
 	}
 	vector<T*> getNeighborsRadius(const ofVec2f& position, float radius) {
 		vector<T*> neighbors;

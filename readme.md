@@ -24,16 +24,15 @@ The easiest way to implement the above is by doing all the distance checks at ea
 
 ## Todo
 
-* render bins with lighter alpha
 * Make sure it restarts when it crashes, screen is on during apap hours. switch for lights would be good to avoid cable movement.
 * White balance to the colors at the top right and top left
 * Measure distances to everything
-* Ensure that it's harder to have metadata without an image (consider saving metadata in jpeg exif)
 * Optimize face tracking parameters, especially min haar size.
 * Only do YUV conversion when saving to disk, or maybe there is a library that will generate jpegs from raw YUV.
 * Resize grayscale image from camera before transposing and flipping to save operations.
 * Use eye center instead of face center?
 * Add config file and multiple city support, handle syncing with rsync.
+* Consider saving metadata in jpeg exif.
 * Do benchmarks on different parts of the code to understand speed and scaling constraints
 * Optimize search function?
 * Optimize JPG saving and loading, see [libjpeg-turbo](http://libjpeg-turbo.virtualgl.org/) saving is pretty fast, but loading on GPU?
