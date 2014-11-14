@@ -158,3 +158,16 @@ For the APAP camera, the following settings are used.
 * CHROMA: 10
 * R-OFFSET: 12
 * B-OFFSET: 5
+
+## Budget
+
+* [Blackmagic Design UltraStudio Mini Recorder Capture Device](http://www.bhphotovideo.com/c/product/892453-REG/Blackmagic_Design_bdlkulsdzminrec_Ultrastudio_Mini_Recorder.html) $140
+* [EverFocus EQH5102 HDcctv / HD-SDI 1080p Mini Box Camera](http://www.bhphotovideo.com/c/product/887209-REG/EverFocus_eqh5102_MINI_BOX_CAMERA_12VDC_1080P.html) $180
+* [Tamron M13VM288IR 1/3" 2.8 to 8mm F / 1.2 Manual Iris IR Corrected Lens](http://www.bhphotovideo.com/c/product/855399-REG/Tamron_M13VM288IR_1_3_2_8_to.html) $110
+* [Mac Mini](http://store.apple.com/us/buy-mac/mac-mini) (required: 2.6 GHz, 256 GB SSD) $900
+* [42" LG 42LN5700](http://www.amazon.com/LG-Electronics-42LN5700-42-Inch-LED-LCD/dp/B00BB9ORW6) $500
+* [Tube-style LED light](http://www.lightnara.com/acecart/bin/shop.cgi?action=view&itemID=LED800014&cate=750800000) 2x900mm $22 and 1x600mm $20, $64 total
+* Surveillance camera mount $30
+* Miscellaneous cables and adapters $50
+
+Total price for materials for one side is $1974, for both sides is $3948.
