@@ -38,7 +38,7 @@ public:
 		ofSetColor(255, 0, 0);
 		neighborsMesh.draw();
 		for(int i = 0; i < neighborsMesh.getNumVertices(); i++) {
-			ofLine(neighborsMesh.getVertex(i), ofVec2f(mouseX, mouseY));
+			ofDrawLine(neighborsMesh.getVertex(i), ofVec2f(mouseX, mouseY));
 		}
 		ofDrawBitmapStringHighlight(ofToString(neighborsMesh.getNumVertices()), mouseX, mouseY);
 		drawFramerate();

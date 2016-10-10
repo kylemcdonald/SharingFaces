@@ -33,10 +33,10 @@ public:
 	}
 	void keyPressed(int key) {
 		if(key == 's') {
-			trackerDataSave.save("out.face");
+			trackerDataSave.save("metadata/out.face");
 		}
 		if(key == 'l') {
-			trackerDataLoad.load("out.face");
+			trackerDataLoad.load("metadata/out.face");
 		}
 	}
 };

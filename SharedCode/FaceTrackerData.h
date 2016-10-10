@@ -12,9 +12,9 @@
 class FaceTrackerData {
 protected:
 	void setLabel(const string& filename) {
-		string prefix = "metadata/";
-		string postfix = ".face";
-		label = filename.substr(prefix.length(), filename.length() - prefix.length() - postfix.length());
+        string prefix = "metadata/";
+        string postfix = ".face";
+        label = filename.substr(prefix.length(), filename.length() - prefix.length() - postfix.length());
 	}
 public:
 	const static int pointCount = 66;
@@ -57,13 +57,13 @@ public:
 		file.close();
 	}
 	float distanceSquared(const ofVec2f& position) const {
-		return this->position.distanceSquared(position);
+		return this->position.squareDistance(position);
 	}
 	void draw() {
 		ofMesh mesh;
 		mesh.setMode(OF_PRIMITIVE_POINTS);
 		for(int i = 0; i < imagePoints.size(); i++) {
-			mesh.addVertex(imagePoints[i]);
+			mesh.addVertex(ofVec3f(imagePoints[i]));
 		}
 		mesh.draw();
 	}

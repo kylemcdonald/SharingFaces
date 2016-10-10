@@ -1,0 +1,5 @@
+ofxBlackmagic
+ofxCv
+ofxFaceTracker
+ofxOpenCv
+ofxTiming

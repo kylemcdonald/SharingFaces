@@ -17,7 +17,7 @@ public:
 	static float closestPosition(const FaceTrackerData& target, const vector<FaceTrackerData*>& data) {
 		float closest = 0;
 		for(int i = 0; i < data.size(); i++) {
-			float distance = data[i]->position.distanceSquared(target.position);
+			float distance = data[i]->position.squareDistance(target.position);
 			if(i == 0 || distance < closest) {
 				closest = distance;
 			}
@@ -54,7 +54,7 @@ public:
 			float distance = 0;
 			const vector<ofVec3f>& b = data[i]->objectPoints;
 			for(int j = 0; j < a.size(); j++) {
-				distance = MAX(distance, a[j].distanceSquared(b[j]));
+				distance = MAX(distance, a[j].squareDistance(b[j]));
 			}
 			if(i == 0 || distance < closest) {
 				closest = distance;
@@ -86,7 +86,7 @@ public:
 		float distanceExpression = 0;
 		const vector<ofVec3f>& aobj = a.objectPoints, bobj = b.objectPoints;
 		for(int i = 0; i < aobj.size(); i++) {
-			distanceExpression += aobj[i].distanceSquared(bobj[i]);
+			distanceExpression += aobj[i].squareDistance(bobj[i]);
 		}
 		distanceExpression = sqrt(distanceExpression);
 		distancePosition *= scalePosition;

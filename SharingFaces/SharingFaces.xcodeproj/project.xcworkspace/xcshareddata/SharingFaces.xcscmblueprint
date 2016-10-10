@@ -1,0 +1,58 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "64328673E816D17AF22421E270591017F49553E6",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "A4D0373C699384D3146D509694B516AB9C7B5AD6" : 9223372036854775807,
+    "2DE9C8846D9375EAACFABA8963120E8E7719BAF5" : 9223372036854775807,
+    "BC9922FFE483A78DDBB9267B94D68853DF1435F5" : 9223372036854775807,
+    "37526DA425E5430474A14FBFA1BC4525160B5FC1" : 9223372036854775807,
+    "64328673E816D17AF22421E270591017F49553E6" : 9223372036854775807,
+    "2D0CFF599BAA58060E7C94A3DA240C286FDA626D" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "7F2F9C5C-20D8-4FFB-9FAA-585A0888CDF4",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "A4D0373C699384D3146D509694B516AB9C7B5AD6" : "..\/addons\/ofxFaceTracker",
+    "2DE9C8846D9375EAACFABA8963120E8E7719BAF5" : "..",
+    "BC9922FFE483A78DDBB9267B94D68853DF1435F5" : "..\/addons\/ofxBlackmagic",
+    "37526DA425E5430474A14FBFA1BC4525160B5FC1" : "..\/addons\/ofxCv",
+    "64328673E816D17AF22421E270591017F49553E6" : "SharingFaces\/",
+    "2D0CFF599BAA58060E7C94A3DA240C286FDA626D" : "..\/addons\/ofxTiming"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "SharingFaces",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "SharingFaces\/SharingFaces.xcodeproj",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:kylemcdonald\/ofxTiming.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2D0CFF599BAA58060E7C94A3DA240C286FDA626D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:kylemcdonald\/openFrameworks.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2DE9C8846D9375EAACFABA8963120E8E7719BAF5"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:kylemcdonald\/ofxCv.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "37526DA425E5430474A14FBFA1BC4525160B5FC1"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:kylemcdonald\/SharingFaces.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "64328673E816D17AF22421E270591017F49553E6"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:kylemcdonald\/ofxFaceTracker.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "A4D0373C699384D3146D509694B516AB9C7B5AD6"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "github.com:kylemcdonald\/ofxBlackmagic.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "BC9922FFE483A78DDBB9267B94D68853DF1435F5"
+    }
+  ]
+}

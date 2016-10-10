@@ -8,12 +8,17 @@
 #include "BinnedData.h"
 #include "FaceCompare.h"
 #include "ImageSaver.h"
+#include "FaceOverlay.h"
 
 using namespace ofxCv;
 using namespace cv;
 
 void useSharedData() {
-	ofSetDataPathRoot("../../../../../SharedData/");
+#ifdef INSTALL
+    ofSetDataPathRoot("../../../../data/shared/");
+#else
+    ofSetDataPathRoot("../../../../../SharedData/");
+#endif
 }
 
 void drawFramerate() {
@@ -70,7 +75,7 @@ ofVec3f getWhitePoint(ofImage& img) {
 float getMaximumDistance(ofVec2f& position, vector<ofVec2f*> positions) {
 	float maximumDistance = 0;
 	for(int i = 0; i < positions.size(); i++) {
-		float distance = position.distanceSquared(*positions[i]);
+		float distance = position.squareDistance(*positions[i]);
 		if(distance > maximumDistance) {
 			maximumDistance = distance;
 		}
@@ -81,7 +86,7 @@ float getMaximumDistance(ofVec2f& position, vector<ofVec2f*> positions) {
 float getMinimumDistance(ofVec2f& position, vector<ofVec2f*> positions) {
 	float minimumDistance = 0;
 	for(int i = 0; i < positions.size(); i++) {
-		float distance = position.distanceSquared(*positions[i]);
+		float distance = position.squareDistance(*positions[i]);
 		if(i == 0 || distance < minimumDistance) {
 			minimumDistance = distance;
 		}
@@ -93,6 +98,7 @@ void loadMetadata(BinnedData<FaceTrackerData>& data) {
 	ofLog() << "loading metadata...";
 	ofDirectory allDates("metadata/");
 	allDates.listDir();
+    int total = 0;
 	for(int i = 0; i < allDates.size(); i++) {
 		ofDirectory curDate(allDates[i].path());
 		curDate.listDir();
@@ -103,11 +109,13 @@ void loadMetadata(BinnedData<FaceTrackerData>& data) {
 			curData.load(metadataFilename);
 			if(ofFile::doesFileExist(curData.getImageFilename())) {
 				data.add(curData.position, curData);
+                total++;
 			} else {
-				ofLogWarning() << "removing metadata " << metadataFilename;
-				ofFile::removeFile(metadataFilename);
+                ofLogWarning() << "couldn't find " << curData.getImageFilename();
+//				ofLogWarning() << "removing metadata " << metadataFilename;
+//				ofFile::removeFile(metadataFilename);
 			}
 		}
 	}
-	ofLog() << "done loading metadata.";
+	ofLog() << "done loading " << allDates.size() << " days, " << total << " faces.";
 }

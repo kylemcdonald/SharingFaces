@@ -18,7 +18,7 @@ The most important thing to match is the position of the face. Then the scale an
 
 While the images are sparse, different search algorithms yield a different exprience. Once the data is dense, different search algorithms only serve to optimize the time required to retrieve a decent image.
 
-A simple algorithm consists of sarching all the available images for some percentage of the total that are within a given position distance threshold. If none are available, the closest one is chosen. If multiple are available, they are searched for a given scale and orientation threshold. Again, if none are available, the closest one is chosen. Finally, if multiple are available, the best expression match is chosen.
+A simple algorithm consists of searching all the available images for some percentage of the total that are within a given position distance threshold. If none are available, the closest one is chosen. If multiple are available, they are searched for a given scale and orientation threshold. Again, if none are available, the closest one is chosen. Finally, if multiple are available, the best expression match is chosen.
 
 The easiest way to implement the above is by doing all the distance checks at each level and then sorting everything after the fact. Another technique for getting the N closest matches is to use a quadtree or binned system if we know the distribution is even.
 

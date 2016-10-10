@@ -29,7 +29,7 @@ public:
         }
     }
     void saveImage(ofPixels& img, string filename) {
-		ofPtr<QueuedImage> cur(new QueuedImage(img, filename));
+		shared_ptr<QueuedImage> cur(new QueuedImage(img, filename));
 		lock();
 		queue.push(cur);
 		unlock();
@@ -56,7 +56,7 @@ public:
 	MultiThreadedImageSaver(int threadCount = 4)
 	:currentThread(0) {
 		for(int i = 0; i < threadCount; i++) {
-			threads.push_back(ofPtr<ThreadedImageSaver>(new ThreadedImageSaver()));
+			threads.push_back(shared_ptr<ThreadedImageSaver>(new ThreadedImageSaver()));
 		}
 	}
 	void saveImage(ofPixels& img, string filename) {
