@@ -31,18 +31,18 @@ public:
 	void add(const ofVec2f& position, T& element) {
 		int x, y;
 		bin(position, x, y);
-		dataMesh.addVertex(position);
+		dataMesh.addVertex((ofVec3f) position);
 		if(data[y][x].empty()) {
 			int w = x * binSize, e = (x + 1) * binSize;
 			int n = y * binSize, s = (y + 1) * binSize;
-			binMesh.addVertex(ofVec2f(w, n));
-			binMesh.addVertex(ofVec2f(e, n));
-			binMesh.addVertex(ofVec2f(e, n));
-			binMesh.addVertex(ofVec2f(e, s));
-			binMesh.addVertex(ofVec2f(e, s));
-			binMesh.addVertex(ofVec2f(w, s));
-			binMesh.addVertex(ofVec2f(w, s));
-			binMesh.addVertex(ofVec2f(w, n));
+			binMesh.addVertex((ofVec3f) ofVec2f(w, n));
+			binMesh.addVertex((ofVec3f) ofVec2f(e, n));
+			binMesh.addVertex((ofVec3f) ofVec2f(e, n));
+			binMesh.addVertex((ofVec3f) ofVec2f(e, s));
+			binMesh.addVertex((ofVec3f) ofVec2f(e, s));
+			binMesh.addVertex((ofVec3f) ofVec2f(w, s));
+			binMesh.addVertex((ofVec3f) ofVec2f(w, s));
+			binMesh.addVertex((ofVec3f) ofVec2f(w, n));
 		}
 		data[y][x].push_back(element);
 		totalElements++;

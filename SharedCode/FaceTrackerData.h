@@ -24,8 +24,8 @@ public:
 	ofVec2f position;
 	float scale;
 	ofVec3f orientation;
-	vector<ofVec3f> objectPoints;
-	vector<ofVec2f> imagePoints;
+    vector<glm::vec3> objectPoints;
+    vector<glm::vec2> imagePoints;
 	
 	void load(const ofxFaceTracker& tracker) {
 		position = tracker.getPosition();

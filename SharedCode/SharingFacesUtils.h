@@ -94,28 +94,48 @@ float getMinimumDistance(ofVec2f& position, vector<ofVec2f*> positions) {
 	return sqrt(minimumDistance);
 }
 
-void loadMetadata(BinnedData<FaceTrackerData>& data) {
-	ofLog() << "loading metadata...";
-	ofDirectory allDates("metadata/");
-	allDates.listDir();
+
+uint64_t startTime;
+void startTimer() {
+    startTime = ofGetElapsedTimeMillis();
+}
+uint64_t checkTimer() {
+    return ofGetElapsedTimeMillis() - startTime;
+}
+
+void loadMetadata(vector<FaceTrackerData>& data) {
+    startTimer();
+    ofLog() << "loading metadata...";
+    ofDirectory allDates("metadata/");
+    allDates.listDir();
     int total = 0;
-	for(int i = 0; i < allDates.size(); i++) {
-		ofDirectory curDate(allDates[i].path());
-		curDate.listDir();
-		string curDateName = "metadata/" + allDates[i].getFileName() + "/";
-		for(int j = 0; j < curDate.size(); j++) {
-			FaceTrackerData curData;
-			string metadataFilename = curDateName + curDate[j].getFileName();
-			curData.load(metadataFilename);
-			if(ofFile::doesFileExist(curData.getImageFilename())) {
-				data.add(curData.position, curData);
+    for(int i = 0; i < allDates.size(); i++) {
+        ofDirectory curDate(allDates[i].path());
+        curDate.listDir();
+        string curDateName = "metadata/" + allDates[i].getFileName() + "/";
+        for(int j = 0; j < curDate.size(); j++) {
+            FaceTrackerData curData;
+            string metadataFilename = curDateName + curDate[j].getFileName();
+            curData.load(metadataFilename);
+            if(ofFile::doesFileExist(curData.getImageFilename())) {
+                data.push_back(curData);
                 total++;
-			} else {
+            } else {
                 ofLogWarning() << "couldn't find " << curData.getImageFilename();
 //				ofLogWarning() << "removing metadata " << metadataFilename;
 //				ofFile::removeFile(metadataFilename);
-			}
-		}
-	}
-	ofLog() << "done loading " << allDates.size() << " days, " << total << " faces.";
+            }
+        }
+    }
+    ofLog() << "done loading " << allDates.size() << " days, " << total << " faces in " << checkTimer() << "ms.";
+}
+
+void loadMetadata(BinnedData<FaceTrackerData>& binned) {
+    vector<FaceTrackerData> data;
+    loadMetadata(data);
+    startTimer();
+    for(FaceTrackerData& item : data) {
+        binned.add(item.position, item);
+    }
+    ofLog() << "done binning " << data.size() << " faces in " << checkTimer() << "ms.";
 }

@@ -49,12 +49,12 @@ public:
 	}
 	static float closestExpression(const FaceTrackerData& target, const vector<FaceTrackerData*>& data) {
 		float closest = 0;
-		const vector<ofVec3f>& a = target.objectPoints;
+		const auto& a = target.objectPoints;
 		for(int i = 0; i < data.size(); i++) {
 			float distance = 0;
-			const vector<ofVec3f>& b = data[i]->objectPoints;
+			const auto& b = data[i]->objectPoints;
 			for(int j = 0; j < a.size(); j++) {
-				distance = MAX(distance, a[j].squareDistance(b[j]));
+				distance = MAX(distance, glm::distance2(a[j], b[j]));
 			}
 			if(i == 0 || distance < closest) {
 				closest = distance;
@@ -84,9 +84,10 @@ public:
 		float distanceScale =  abs(a.scale - b.scale);
 		float distanceOrientation = a.orientation.distance(b.orientation); // approximation
 		float distanceExpression = 0;
-		const vector<ofVec3f>& aobj = a.objectPoints, bobj = b.objectPoints;
+        const auto& aobj = a.objectPoints;
+        const auto& bobj = b.objectPoints;
 		for(int i = 0; i < aobj.size(); i++) {
-			distanceExpression += aobj[i].squareDistance(bobj[i]);
+			distanceExpression += glm::distance2(aobj[i], bobj[i]);
 		}
 		distanceExpression = sqrt(distanceExpression);
 		distancePosition *= scalePosition;

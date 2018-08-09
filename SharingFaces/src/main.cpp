@@ -1,4 +1,4 @@
-#define INSTALL
+//#define INSTALL
 //#define USE_WHITE_POINT
 
 #include "ofMain.h"
@@ -77,7 +77,7 @@ public:
     }
     void exit() {
         imageSaver.exit();
-        tracker.stopThread();
+        tracker.waitForThread();
 #ifdef INSTALL
         cam.close();
 #endif

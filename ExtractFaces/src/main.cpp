@@ -4,26 +4,39 @@
 
 class ofApp : public ofBaseApp {
 public:
-	BinnedData<FaceTrackerData> data;
-	
+	vector<FaceTrackerData> data;
+    int offset = 0;
+    
 	void setup() {
 		useSharedData();
-        data.setup(1080, 1920, 10);
         loadMetadata(data);
+        ofBackground(0);
         ofSetBackgroundAuto(false);
+        ofSetColor(255);
 	}
 	void update() {
 	}
 	void draw() {
-		ofSetColor(255);
-        ofVec2f position(mouseX, mouseY);
-        vector<FaceTrackerData*> results = data.getNeighborsCount(position, 1);
-        for(FaceTrackerData* cur : results) {
-            ofImage img(cur->getImageFilename());
-            int r = 200;
-            int ox = cur->position.x - r/2;
-            int oy = cur->position.y - r/2;
-            img.drawSubsection(ox, oy, r, r, ox, oy);
+        if(ofGetFrameNum() > 4) {
+            for(int i = 0; i < 4; i++) {
+                if(offset < data.size()) {
+                    FaceTrackerData& cur = data[offset];
+                    ofImage img(cur.getImageFilename());
+                    int r = 50 * cur.scale;
+                    int ox = cur.position.x - r/2;
+                    int oy = cur.position.y - r/2;
+                    
+        //            img.drawSubsection(ox, oy, r, r, ox, oy);
+                    
+                    int s = 24;
+                    int x = (offset * s) % ofGetWidth();
+                    int y = (offset * s) / ofGetWidth();
+                    y *= s;
+                    img.drawSubsection(x, y, s, s, ox, oy, r, r);
+                    
+                }
+                offset++;
+            }
         }
 	}
 	void keyPressed(int key) {
@@ -31,6 +44,6 @@ public:
 };
 
 int main() {
-	ofSetupOpenGL(1280, 720, OF_WINDOW);
+	ofSetupOpenGL(1920, 1080, OF_FULLSCREEN);
 	ofRunApp(new ofApp());
 }
