@@ -14,24 +14,24 @@ public:
 
 class ThreadedImageSaver : public ofThread {
 private:
-    queue< ofPtr<QueuedImage> > queue;
+    queue< ofPtr<QueuedImage> > data;
 public:
     void threadedFunction() {
-        while(!queue.empty()) {
+        while(!data.empty()) {
 			if(!isThreadRunning()) {
-				ofLogWarning("ThreadedImageSaver") << queue.size() << " images left to save";
+				ofLogWarning("ThreadedImageSaver") << data.size() << " images left to save";
 			}
-			ofPtr<QueuedImage> cur = queue.front();
+			ofPtr<QueuedImage> cur = data.front();
 			ofSaveImage(cur->image, cur->filename, OF_IMAGE_QUALITY_HIGH);
 			lock();
-			queue.pop();
+			data.pop();
 			unlock();
         }
     }
     void saveImage(ofPixels& img, string filename) {
 		shared_ptr<QueuedImage> cur(new QueuedImage(img, filename));
 		lock();
-		queue.push(cur);
+		data.push(cur);
 		unlock();
 		if(!isThreadRunning()){
 			startThread();
@@ -39,7 +39,7 @@ public:
     }
 	int getQueueSize() {
 		lock();
-		int size = queue.size();
+		int size = data.size();
 		unlock();
 		return size;
 	}

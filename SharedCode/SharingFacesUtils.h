@@ -1,8 +1,11 @@
 #pragma once
 
-#include "ofxCv.h"
+#ifdef BLACKMAGIC
 #include "ofxBlackMagic.h"
-#include "ofxFaceTrackerTHreaded.h"
+#endif
+
+#include "ofxCv.h"
+#include "ofxFaceTrackerThreaded.h"
 #include "ofxTiming.h"
 #include "FaceTrackerData.h"
 #include "BinnedData.h"
@@ -15,10 +18,14 @@ using namespace cv;
 
 void useSharedData() {
 #ifdef INSTALL
-    ofSetDataPathRoot("../../../../data/shared/");
+    string dataPathRoot = "data/shared/";
 #else
-    ofSetDataPathRoot("../../../../../SharedData/");
+    string dataPathRoot = "../../SharedData/";
 #endif
+#ifdef TARGET_OSX
+    dataPathRoot = "../../../" + dataPathRoot;
+#endif
+    ofSetDataPathRoot(dataPathRoot);
 }
 
 void drawFramerate() {

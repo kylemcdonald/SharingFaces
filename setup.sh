@@ -1,0 +1,1 @@
+cp -r ../../addons/ofxFaceTracker/libs/FaceTracker/model SharedData/

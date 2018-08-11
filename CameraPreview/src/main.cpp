@@ -53,6 +53,7 @@ public:
     int camWidth = 1280, camHeight = 720;
 	
 	void setup() {
+        ofSetVerticalSync(true);
         installationMode = ofGetScreenWidth() < ofGetScreenHeight();
         if(installationMode) {
             rotate = true;
