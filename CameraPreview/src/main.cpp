@@ -1,7 +1,4 @@
-#define USE_BLACKMAGIC
-
 #include "ofMain.h"
-#include "ofxBlackMagic.h"
 
 void drawHistogram(const ofPixels& pix, float height = 128, int skip = 16) {
     vector<float> r(256), g(256), b(256);
@@ -18,18 +15,22 @@ void drawHistogram(const ofPixels& pix, float height = 128, int skip = 16) {
     rmesh.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
     gmesh.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
     bmesh.setMode(OF_PRIMITIVE_TRIANGLE_STRIP);
+    int peak = 0;
     for(int i = 0; i < 255; i++) {
-        rmesh.addVertex(ofVec2f(i, 0));
-        rmesh.addVertex(ofVec2f(i, r[i]));
-        gmesh.addVertex(ofVec2f(i, 0));
-        gmesh.addVertex(ofVec2f(i, g[i]));
-        bmesh.addVertex(ofVec2f(i, 0));
-        bmesh.addVertex(ofVec2f(i, b[i]));
+        rmesh.addVertex(ofVec3f(i, 0));
+        rmesh.addVertex(ofVec3f(i, r[i]));
+        gmesh.addVertex(ofVec3f(i, 0));
+        gmesh.addVertex(ofVec3f(i, g[i]));
+        bmesh.addVertex(ofVec3f(i, 0));
+        bmesh.addVertex(ofVec3f(i, b[i]));
+        peak = MAX(peak, r[i]);
+        peak = MAX(peak, g[i]);
+        peak = MAX(peak, b[i]);
     }
     ofPushMatrix();
     ofPushStyle();
     ofEnableBlendMode(OF_BLENDMODE_ADD);
-    ofScale(2, height / (samples / 255));
+    ofScale(2, height / peak);
     ofTranslate(.5, 0);
     ofSetColor(255, 0, 0);
     rmesh.draw();
@@ -43,39 +44,33 @@ void drawHistogram(const ofPixels& pix, float height = 128, int skip = 16) {
 
 class ofApp : public ofBaseApp {
 public:
-#ifdef USE_BLACKMAGIC
-	ofxBlackMagic cam;
-#else
     ofVideoGrabber cam;
-#endif
 	ofImage clipping;
-    bool rotate;
-    bool toggleGrayscale;
+    bool fullscreen = true;
+    bool rotate = false;
+    bool toggleGrayscale = false;
+    bool installationMode = false;
+    int camWidth = 1280, camHeight = 720;
 	
 	void setup() {
+        installationMode = ofGetScreenWidth() < ofGetScreenHeight();
+        if(installationMode) {
+            rotate = true;
+            camWidth = 1920, camHeight = 1080;
+        }
+        
         ofBackground(0);
-#ifdef USE_BLACKMAGIC
-        cam.setup(1920, 1080, 25);
-        clipping.allocate(1920, 1080, OF_IMAGE_COLOR_ALPHA);
-#else
-        cam.initGrabber(1280, 720);
-        clipping.allocate(1280, 720, OF_IMAGE_COLOR_ALPHA);
-#endif
-        rotate = true;
+        cam.initGrabber(camWidth, camHeight);
+        clipping.allocate(camWidth, camHeight, OF_IMAGE_COLOR_ALPHA);
         toggleGrayscale = false;
 	}
 	void exit() {
 		cam.close();
 	}
 	void update() {
-#ifdef USE_BLACKMAGIC
-        ofPixels& pix = cam.getColorPixels();
-        if(cam.update()) {
-#else
         cam.update();
         ofPixels& pix = cam.getPixels();
         if(cam.isFrameNew()) {
-#endif
             int skip = 2;
             int range = mouseX / 25;
             for(int y = 0; y < cam.getHeight(); y += skip) {
@@ -105,8 +100,7 @@ public:
         ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
         if(rotate) {
             ofRotate(90);
-        }
-        if(ofGetHeight() != 1920) {
+        } else {
             float scale = (float) ofGetWidth() / cam.getWidth();
             if(rotate) {
                 scale = (float) ofGetHeight() / cam.getWidth();
@@ -114,29 +108,29 @@ public:
             ofScale(scale, scale);
         }
         ofTranslate(-cam.getWidth() / 2, -cam.getHeight() / 2);
-#ifdef USE_BLACKMAGIC
-        if(toggleGrayscale && ofGetElapsedTimeMillis() % 500 > 250) {
-            cam.drawGray();
-        } else {
-            cam.drawColor();
-        }
-#else
         cam.draw(0, 0);
-#endif 
         clipping.draw(0, 0);
         ofPopMatrix();
-#ifdef USE_BLACKMAGIC
-        drawHistogram(cam.getColorPixels(), mouseY);
-#else
         drawHistogram(cam.getPixels(), mouseY);
-#endif
 	}
+    void updateWindowShape() {
+        if(!fullscreen) {
+            if(rotate) {
+                ofSetWindowShape(camHeight, camWidth);
+            } else {
+                ofSetWindowShape(camWidth, camHeight);
+            }
+        }
+    }
 	void keyPressed(int key) {
 		if(key == 'f') {
-			ofToggleFullscreen();
+            fullscreen = !fullscreen;
+            ofSetFullscreen(fullscreen);
+            updateWindowShape();
 		}
         if(key == '\t') {
             rotate = !rotate;
+            updateWindowShape();
         }
         if(key == 'g') {
             toggleGrayscale = !toggleGrayscale;
@@ -145,6 +139,6 @@ public:
 };
 
 int main() {
-	ofSetupOpenGL(1080, 1920, OF_FULLSCREEN);
+	ofSetupOpenGL(1080, 1080, OF_FULLSCREEN);
 	ofRunApp(new ofApp());
 }

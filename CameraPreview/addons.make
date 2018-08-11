@@ -1,4 +1,3 @@
-ofxBlackmagic
 ofxCv
 ofxFaceTracker
 ofxOpenCv
