@@ -1,4 +1,6 @@
 #include "ofMain.h"
+#include "ofxBlackmagicGrabber.h"
+#include "ImageSaver.h"
 
 void drawHistogram(const ofPixels& pix, float height = 128, int skip = 16) {
     vector<float> r(256), g(256), b(256);
@@ -31,6 +33,8 @@ void drawHistogram(const ofPixels& pix, float height = 128, int skip = 16) {
     ofPushStyle();
     ofEnableBlendMode(OF_BLENDMODE_ADD);
     ofScale(2, height / peak);
+    ofSetColor(255);
+    ofDrawLine(256, 0, 256, peak);
     ofTranslate(.5, 0);
     ofSetColor(255, 0, 0);
     rmesh.draw();
@@ -44,38 +48,50 @@ void drawHistogram(const ofPixels& pix, float height = 128, int skip = 16) {
 
 class ofApp : public ofBaseApp {
 public:
-    ofVideoGrabber cam;
-	ofImage clipping;
-    bool fullscreen = true;
-    bool rotate = false;
+    ofxBlackMagicGrabber blackmagicGrabber;
+    ofVideoGrabber videoGrabber;
+    ofVideoGrabber* cam;
+    
+    MultiThreadedImageSaver imageSaver;
+    
+    ofImage clipping;
     bool toggleGrayscale = false;
-    bool installationMode = false;
-    int camWidth = 1280, camHeight = 720;
-	
-	void setup() {
+    ofJson config;
+    string device;
+    bool recording = false;
+    int frameCount = 0;
+    
+    void setup() {
         ofSetVerticalSync(true);
-        installationMode = ofGetScreenWidth() < ofGetScreenHeight();
-        if(installationMode) {
-            rotate = true;
-            camWidth = 1920, camHeight = 1080;
-        }
-        
         ofBackground(0);
-        cam.initGrabber(camWidth, camHeight);
+        config = ofLoadJson("../../../SharedData/shared/config.json");
+        float camWidth = config["camera"]["width"];
+        float camHeight = config["camera"]["height"];
+        float camFrameRate = config["camera"]["framerate"];
+        device = config["camera"]["device"];
+        if (device == "blackmagic") {
+            cam = &blackmagicGrabber;
+        } else {
+            cam = &videoGrabber;
+        }
+        cam->setDesiredFrameRate(camFrameRate);
+        cam->setup(camWidth, camHeight);
         clipping.allocate(camWidth, camHeight, OF_IMAGE_COLOR_ALPHA);
         toggleGrayscale = false;
-	}
-	void exit() {
-		cam.close();
-	}
-	void update() {
-        cam.update();
-        ofPixels& pix = cam.getPixels();
-        if(cam.isFrameNew()) {
+        updateWindowShape();
+    }
+    void exit() {
+        imageSaver.exit();
+        cam->close();
+    }
+    void update() {
+        cam->update();
+        if(cam->isFrameNew()) {
+            ofPixels& pix = cam->getPixels();
             int skip = 2;
             int range = mouseX / 25;
-            for(int y = 0; y < cam.getHeight(); y += skip) {
-                for(int x = 0; x < cam.getWidth(); x += skip) {
+            for(int y = 0; y < pix.getHeight(); y += skip) {
+                for(int x = 0; x < pix.getWidth(); x += skip) {
                     ofColor cur = pix.getColor(x, y);
                     ofColor result(0, 0, 0, 0);
                     if(cur.r < range || cur.r > 255-range) {
@@ -94,52 +110,56 @@ public:
                 }
             }
             clipping.update();
-        }   
-	}
-    void draw() {
-        ofPushMatrix();
-        ofTranslate(ofGetWidth() / 2, ofGetHeight() / 2);
-        if(rotate) {
-            ofRotate(90);
-        } else {
-            float scale = (float) ofGetWidth() / cam.getWidth();
-            if(rotate) {
-                scale = (float) ofGetHeight() / cam.getWidth();
-            }
-            ofScale(scale, scale);
-        }
-        ofTranslate(-cam.getWidth() / 2, -cam.getHeight() / 2);
-        cam.draw(0, 0);
-        clipping.draw(0, 0);
-        ofPopMatrix();
-        drawHistogram(cam.getPixels(), mouseY);
-	}
-    void updateWindowShape() {
-        if(!fullscreen) {
-            if(rotate) {
-                ofSetWindowShape(camHeight, camWidth);
-            } else {
-                ofSetWindowShape(camWidth, camHeight);
+            
+            if(recording) {
+                string fn = "images/" + ofToString(frameCount, 6, '0') + ".jpg";
+                imageSaver.saveImage(pix, fn);
+                frameCount++;
             }
         }
     }
-	void keyPressed(int key) {
-		if(key == 'f') {
-            fullscreen = !fullscreen;
-            ofSetFullscreen(fullscreen);
+    void draw() {
+        ofPushMatrix();
+        float screenWidth = config["screen"]["width"];
+        float screenHeight = config["screen"]["height"];
+        float camWidth = config["camera"]["width"];
+        float camHeight = config["camera"]["height"];
+        ofTranslate(screenWidth / 2, screenHeight / 2);
+        ofRotateZDeg(config["camera"]["rotate"]);
+        ofTranslate(-camWidth / 2, -camHeight / 2);
+        if(cam->isInitialized()) {
+            cam->draw(0,0);
+        }
+        clipping.draw(0, 0);
+        ofPopMatrix();
+        if(cam->isInitialized()) {
+            drawHistogram(cam->getPixels(), mouseY);
+        }
+    }
+    void updateWindowShape() {
+        ofSetWindowShape(config["screen"]["width"], config["screen"]["height"]);
+        ofSetWindowPosition(config["screen"]["x"], config["screen"]["y"]);
+        ofSetFullscreen(config["screen"]["fullscreen"]);
+    }
+    void keyPressed(int key) {
+        if(key == 'r') {
+            recording = !recording;
+        }
+        if(key == 'f') {
+            config["screen"]["fullscreen"] = !config["screen"]["fullscreen"];
             updateWindowShape();
-		}
+        }
         if(key == '\t') {
-            rotate = !rotate;
+            config["camera"]["rotate"] = config["camera"]["rotate"] == 0 ? 90 : 0;
             updateWindowShape();
         }
         if(key == 'g') {
             toggleGrayscale = !toggleGrayscale;
         }
-	}
+    }
 };
 
 int main() {
-	ofSetupOpenGL(1080, 1080, OF_FULLSCREEN);
-	ofRunApp(new ofApp());
+    ofSetupOpenGL(1080, 1080, OF_WINDOW);
+    ofRunApp(new ofApp());
 }

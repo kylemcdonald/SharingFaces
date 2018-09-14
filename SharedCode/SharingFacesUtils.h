@@ -1,9 +1,5 @@
 #pragma once
 
-#ifdef BLACKMAGIC
-#include "ofxBlackMagic.h"
-#endif
-
 #include "ofxCv.h"
 #include "ofxFaceTrackerThreaded.h"
 #include "ofxTiming.h"
@@ -17,11 +13,7 @@ using namespace ofxCv;
 using namespace cv;
 
 void useSharedData() {
-#ifdef INSTALL
-    string dataPathRoot = "data/shared/";
-#else
-    string dataPathRoot = "../../SharedData/";
-#endif
+    string dataPathRoot = "../../SharedData/shared";
 #ifdef TARGET_OSX
     dataPathRoot = "../../../" + dataPathRoot;
 #endif

@@ -1,23 +1,20 @@
-#define INSTALL
-//#define USE_WHITE_POINT
-
 #include "ofMain.h"
+#include "ofxBlackMagicGrabber.h"
 #include "SharingFacesUtils.h"
-
-const int installWidth = 1080, installHeight = 1920;
-const int camWidth = 1920, camHeight = 1080;
 
 class ofApp : public ofBaseApp {
 public:
-    ofVideoGrabber cam;
-    ofShader shader;
+    ofVideoGrabber videoGrabber;
+    ofxBlackMagicGrabber blackmagicGrabber;
+    ofBaseVideoGrabber* cam;
+    
     FaceOverlay overlay;
     ofxFaceTrackerThreaded tracker;
     BinnedData<FaceTrackerData> data;
     FaceCompare faceCompare;
     MultiThreadedImageSaver imageSaver;
     
-    bool rotate;
+    int rotate;
     int binSize;
     float neighborRadius;
     int neighborCount;
@@ -32,12 +29,18 @@ public:
     FadeTimer presenceFade, faceFade;
     vector< pair<ofVec2f, FaceTrackerData> > currentData;
     
+    ofJson config;
+    
     void setup() {
         useSharedData();
-#ifdef INSTALL
-        ofLogToFile("../local/log.txt");
-#endif
-        loadSettings();
+        config = ofLoadJson("config.json");
+        if(config["log"]) {
+            ofLogToFile("../local/log.txt");
+        }
+        
+        binSize = 10;
+        neighborRadius = 20;
+        neighborCount = 100;
         
         tracker.setup();
         tracker.setHaarMinSize(175);
@@ -47,12 +50,23 @@ public:
         tracker.setClamp(3);
         tracker.setAttempts(4);
         
-        cam.setup(camWidth, camHeight, false);
+        rotate = config["camera"]["rotate"];
+        int camWidth = config["camera"]["width"];
+        int camHeight = config["camera"]["height"];
         
-        if(rotate) {
-            data.setup(camHeight, camWidth, binSize);
+        if(config["camera"]["device"] == "blackmagic") {
+            blackmagicGrabber.setDesiredFrameRate(config["camera"]["framerate"]);
+            blackmagicGrabber.setup(camWidth, camHeight);
+            cam = &blackmagicGrabber;
         } else {
+            videoGrabber.setup(camWidth, camHeight, false);
+            cam = &videoGrabber;
+        }
+        
+        if(rotate == 0 || rotate == 180) {
             data.setup(camWidth, camHeight, binSize);
+        } else {
+            data.setup(camHeight, camWidth, binSize);
         }
         loadMetadata(data);
         presence.setDelay(0, 4);
@@ -60,45 +74,48 @@ public:
         presenceFade.start();
         faceFade.setLength(0, 30);
         faceFade.start();
-        shader.load("shaders/colorbalance.vs", "shaders/colorbalance.fs");
-        ofDisableAntiAliasing();
+        ofDisableAntiAliasing(); // why is this here?
         glPointSize(2);
         ofSetLineWidth(3);
         ofSetLogLevel(OF_LOG_VERBOSE);
+        
+        checkScreenSize();
     }
     void exit() {
+        cam->close();
         imageSaver.exit();
         tracker.waitForThread();
     }
-    void loadSettings() {
-#ifdef INSTALL
-        rotate = true;
-#else
-        rotate = false;
-#endif
-        binSize = 10;
-        neighborRadius = 20;
-        neighborCount = 100;
-    }
     void checkScreenSize() {
-        if(ofGetWindowHeight() != installHeight ||
-           ofGetWindowWidth() != installWidth) {
-            ofSetFullscreen(false);
-            ofSetFullscreen(true);
+        int curx = ofGetWindowPositionX();
+        int cury = ofGetWindowPositionY();
+        int screenx = config["screen"]["x"];
+        int screeny = config["screen"]["y"];
+        if(curx != screenx || cury != screeny) {
+            ofSetWindowPosition(screenx, screeny);
+        }
+        bool fullscreen = config["screen"]["fullscreen"];
+        ofSetFullscreen(fullscreen);
+        if(!fullscreen) {
+            int curw = ofGetWindowWidth();
+            int curh = ofGetWindowHeight();
+            int screenw = config["screen"]["width"];
+            int screenh = config["screen"]["height"];
+            if(curw != screenw && curh != screenh) {
+                ofSetWindowShape(screenw, screenh);
+            }
         }
     }
     void update() {
-#ifdef INSTALL
-        checkScreenSize();
-#endif
-        cam.update();
-        if(cam.isFrameNew()) {
-            ofPixels& pixels = cam.getPixels();
-            if(rotate) {
-                ofxCv::transpose(pixels, rotated);
-            } else {
-                ofxCv::copy(pixels, rotated);
+        cam->update();
+        if(cam->isFrameNew()) {
+            ofPixels& pixels = cam->getPixels();
+            ofxCv::rotate90(pixels, rotated, rotate);
+            if(config["camera"]["mirror"]) {
+                ofxCv::flip(rotated, rotated, 1);
             }
+            imageSaver.saveImage(rotated.getPixels(), "../reference/" + ofToString(ofGetFrameNum(), 6) + ".jpg");
+            
             Mat rotatedMat = toCv(rotated);
             if(tracker.update(rotatedMat))  {
                 ofVec2f position = tracker.getPosition();
@@ -109,9 +126,6 @@ public:
                     nearestData = *faceCompare.nearest(curData, neighbors);
                     if(nearestData.label != lastLabel) {
                         similar.load(nearestData.getImageFilename());
-#ifdef USE_WHITE_POINT
-                        whitePoint = getWhitePoint(similar);
-#endif
                     }
                     lastLabel = nearestData.label;
                 }
@@ -120,6 +134,7 @@ public:
                     currentData.push_back(pair<ofVec2f, FaceTrackerData>(position, curData));
                 }
             }
+//            cout << rotatedMat.cols << "x" << rotatedMat.rows << "x" << rotatedMat.channels() << ": " << tracker.getFound() << endl;
             presence.update(tracker.getFound());
             if(presence.wasTriggered()) {
                 presenceFade.stop();
@@ -137,22 +152,10 @@ public:
     }
     void draw() {
         ofBackground(255);
-#ifdef TARGET_OSX
-        CGDisplayHideCursor(NULL);
-#else
         ofHideCursor();
-#endif
         ofSetColor(255);
         if(similar.isAllocated()) {
-#ifdef USE_WHITE_POINT
-            shader.begin();
-            shader.setUniformTexture("tex", similar, 0);
-            shader.setUniform3fv("whitePoint", (float*) &whitePoint);
             similar.draw(0, 0);
-            shader.end();
-#else
-            similar.draw(0, 0);
-#endif
         }
         ofPushStyle();
         if(presenceFade.getActive()) {
@@ -173,9 +176,9 @@ public:
         overlay.draw(tracker);
         ofPopStyle();
         
-#ifndef INSTALL
-        drawFramerate();
-#endif
+        if(config["debug"]) {
+            drawFramerate();
+        }
     }
     void keyPressed(int key) {
         if(key == 'f') {
@@ -191,6 +194,6 @@ public:
 };
 
 int main() {
-    ofSetupOpenGL(1080, 1080, OF_FULLSCREEN);
+    ofSetupOpenGL(1080, 1080, OF_WINDOW);
     ofRunApp(new ofApp());
 }
