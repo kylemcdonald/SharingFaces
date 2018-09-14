@@ -48,11 +48,14 @@ public:
 		totalElements++;
 	}
 	void drawBins() {
+        ofPushMatrix();
+        ofTranslate(0.5, 0.5);
 		ofPushStyle();
 		ofNoFill();
 		ofSetLineWidth(1);
 		binMesh.draw();
 		ofPopStyle();
+        ofPopMatrix();
 	}
 	void drawData() {
 		dataMesh.draw();

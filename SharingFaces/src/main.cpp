@@ -74,7 +74,7 @@ public:
         presenceFade.start();
         faceFade.setLength(0, 30);
         faceFade.start();
-        ofDisableAntiAliasing(); // why is this here?
+//        ofDisableAntiAliasing(); // why is this here?
         glPointSize(2);
         ofSetLineWidth(3);
         ofSetLogLevel(OF_LOG_VERBOSE);
