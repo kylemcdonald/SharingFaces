@@ -1,0 +1,19 @@
+{
+	"screen": {
+		"x": 1440,
+		"y": 0,
+		"width": 1080,
+		"height": 1920,
+		"fullscreen": true
+	},
+	"camera": {
+		"device": "blackmagic",
+		"width": 1920,
+		"height": 1080,
+		"framerate": 30,
+		"rotate": -90,
+		"mirror": true
+	},
+	"log": true,
+	"debug": false
+}
