@@ -2,6 +2,15 @@
 
 An installation for APAP Festival 2013 in Anyang, South Korea.
 
+## History
+
+* 2013: APAP Festival. Anyang, South Korea and Yamaguchi, Japan.
+* 2015: Bouillants. Rennes, France.
+* 2016: Wild Bunch Festival. Yamaguchi, Japan.
+* 2016: accès)s(. Pau, France.
+* 2018: Taoyuan Art & Technology Festival. Taoyuan, Taiwan.
+* 2019: Exploratorium. San Francisco, California.
+
 ## Theory
 
 Each visitor might spend 3 minutes with the piece, which could mean up to 5,000 images. Many of these images will be similar to each other or to previous images, so we only save the most representative ones (an order of magnitude fewer).
