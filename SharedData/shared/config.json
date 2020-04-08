@@ -15,5 +15,5 @@
 		"mirror": true
 	},
 	"log": true,
-	"debug": false
+	"debug": true
 }

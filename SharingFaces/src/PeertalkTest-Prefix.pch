@@ -1,0 +1,10 @@
+//
+//  PeertalkTest-Prefix.pch
+//  PeertalkTest
+//
+//  Created by Elliott Spelman on 3/1/19.
+//
+
+#ifdef __OBJC__
+//#import <Cocoa/Cocoa.h>
+#endif

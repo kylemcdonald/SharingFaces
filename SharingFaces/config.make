@@ -37,7 +37,7 @@
 #
 #   Note: Leave a leading space when adding list items with the += operator
 ################################################################################
-PROJECT_EXTERNAL_SOURCE_PATHS = ../SharedCode
+# PROJECT_EXTERNAL_SOURCE_PATHS = 
 
 ################################################################################
 # PROJECT EXCLUSIONS

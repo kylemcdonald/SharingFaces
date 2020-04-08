@@ -1,5 +1,6 @@
 ofxBlackmagic
 ofxCv
-ofxFaceTracker
+ofxJSON
 ofxOpenCv
+ofxPoco
 ofxTiming
